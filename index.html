@@ -19,6 +19,12 @@
   <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/styles.css">
   <script src="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/_ds_bundle.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&family=Google+Sans+Flex:wght@400..700&display=swap">
+  <script type="module">
+    // Browser -> Vercel Blob direct upload, paired with /api/upload.
+    // Pinned to the same major the deploy's package.json installs.
+    window.__dcBlobReady = import('https://esm.sh/@vercel/blob@1.1.1/client')
+      .then(m => (window.__dcBlobUpload = m.upload));
+  </script>
   <style>
     :root {
       --primary-50: #FFF6EE; --primary-100: #FFE9D4; --primary-200: #FEDCB8; --primary-300: #FEC196;
@@ -76,12 +82,19 @@
     <div style="background: {{ qBg }}; color: {{ qFg }}; transition: background-color 320ms cubic-bezier(0.2,0,0,1), color 320ms cubic-bezier(0.2,0,0,1); border-radius: var(--radius-2xl); padding: 32px; display: flex; flex-direction: column; gap: 24px; min-height: 560px; box-sizing: border-box; overflow: hidden;">
       <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
         <div style="font-family: var(--font-heading); font-weight: 500; font-size: var(--text-2xl); letter-spacing: -0.018em;">Things {{ name }} said</div>
-        <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{ qHasItems }}" hint-placeholder-val="{{ true }}">
           <div style="font-family: var(--font-mono); font-size: var(--text-sm); font-feature-settings: 'tnum' 1;">{{ qCounter }}</div>
         </sc-if>
       </div>
 
-      <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ qEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+          <div style="font-family: var(--font-heading); font-weight: 500; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.15; letter-spacing: -0.02em;">Nothing overheard yet.</div>
+          <div style="font-size: var(--text-base); opacity: 0.85; text-wrap: pretty;">{{ emptyHint }}</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ qHasItems }}" hint-placeholder-val="{{ true }}">
         <div onPointerDown="{{ qDown }}" onPointerMove="{{ qMove }}" onPointerUp="{{ qUp }}" onPointerLeave="{{ qUp }}" style="flex: 1; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; display: flex;">
           <div style="display: flex; width: 100%; transform: {{ qTransform }}; transition: {{ qTransition }};">
             <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="1">
@@ -125,7 +138,7 @@
           </sc-if>
           <input type="file" accept="image/*" ref="{{ qPhotoRef }}" onChange="{{ qOnPhoto }}" style="display: none;">
           <div style="margin-top: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="secondary" disabled="{{ qInvalid }}" on-click="{{ addQuote }}" hint-size="120px,40px">Add quote</x-import>
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="secondary" disabled="{{ qInvalid }}" on-click="{{ addQuote }}" hint-size="120px,40px">{{ qAddLabel }}</x-import>
             <div style="font-size: var(--text-sm); font-weight: 500;">{{ qNote }}</div>
           </div>
         </div>
@@ -136,12 +149,19 @@
     <div style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-2xl); padding: 32px; display: flex; flex-direction: column; gap: 24px; min-height: 560px; box-sizing: border-box; overflow: hidden;">
       <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
         <div style="font-family: var(--font-heading); font-weight: 500; font-size: var(--text-2xl); letter-spacing: -0.018em;">{{ msgTitle }}</div>
-        <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{ mHasItems }}" hint-placeholder-val="{{ true }}">
           <div style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted); font-feature-settings: 'tnum' 1;">{{ mCounter }}</div>
         </sc-if>
       </div>
 
-      <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ mEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+          <div style="font-family: var(--font-heading); font-weight: 500; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.15; letter-spacing: -0.02em; color: var(--text-base);">No messages yet.</div>
+          <div style="font-size: var(--text-base); color: var(--text-muted); text-wrap: pretty;">{{ emptyHint }}</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ mHasItems }}" hint-placeholder-val="{{ true }}">
         <div onPointerDown="{{ mDown }}" onPointerMove="{{ mMove }}" onPointerUp="{{ mUp }}" onPointerLeave="{{ mUp }}" style="flex: 1; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; display: flex;">
           <div style="display: flex; width: 100%; transform: {{ mTransform }}; transition: {{ mTransition }};">
             <sc-for list="{{ messages }}" as="m" hint-placeholder-count="1">
@@ -238,15 +258,23 @@
                 <sc-if value="{{ notRecording }}" hint-placeholder-val="{{ true }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg></sc-if>
               </button>
               <div style="font-family: var(--font-mono); font-size: var(--text-xl); font-feature-settings: 'tnum' 1;">{{ recTime }}</div>
-              <div style="font-size: var(--text-sm); color: var(--text-muted);">{{ recHint }}</div>
+              <div style="font-size: var(--text-sm); color: {{ recHintColor }};">{{ recHint }}</div>
+              <sc-if value="{{ hasVoicePreview }}" hint-placeholder-val="{{ false }}">
+                {{ voicePreviewEl }}
+              </sc-if>
             </div>
           </sc-if>
 
           <sc-if value="{{ fVideo }}" hint-placeholder-val="{{ false }}">
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 32px 16px; border: 1px dashed var(--border-default); border-radius: var(--radius-xl); background: var(--surface-muted); text-align: center;">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color: var(--icon-default);"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>
+              <sc-if value="{{ hasVideoPreview }}" hint-placeholder-val="{{ false }}">
+                {{ videoPreviewEl }}
+              </sc-if>
+              <sc-if value="{{ noVideoPreview }}" hint-placeholder-val="{{ true }}">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color: var(--icon-default);"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>
+              </sc-if>
               <div style="font-weight: 600;">{{ videoTitle }}</div>
-              <div style="font-size: var(--text-sm); color: var(--text-muted);">MP4 or MOV, up to 2 minutes</div>
+              <div style="font-size: var(--text-sm); color: {{ recHintColor }};">{{ videoHint }}</div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
                 <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="secondary" size="small" on-click="{{ pickVideo }}" hint-size="120px,32px">Upload video</x-import>
                 <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="outline" size="small" on-click="{{ toggleRec }}" hint-size="120px,32px">{{ videoRecLabel }}</x-import>
@@ -273,8 +301,8 @@
           </sc-if>
           <input type="file" accept="image/*" ref="{{ mPhotoRef }}" onChange="{{ mOnPhoto }}" style="display: none;">
           <div style="margin-top: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="tertiary" disabled="{{ mInvalid }}" on-click="{{ addMessage }}" hint-size="140px,40px">Send message</x-import>
-            <div style="font-size: var(--text-sm); color: var(--text-success); font-weight: 500;">{{ mNote }}</div>
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="tertiary" disabled="{{ mInvalid }}" on-click="{{ addMessage }}" hint-size="140px,40px">{{ mSendLabel }}</x-import>
+            <div style="font-size: var(--text-sm); color: {{ mNoteColor }}; font-weight: 500;">{{ mNote }}</div>
           </div>
         </div>
       </sc-if>
@@ -289,49 +317,152 @@
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;recipientName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Joanne&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;card&quot;,&quot;collect&quot;],&quot;default&quot;:&quot;card&quot;,&quot;tsType&quot;:&quot;'card' | 'collect'&quot;},&quot;cardOnly&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+// Example entries. Shown in the design-tool preview and anywhere /api/entries
+// can't be reached; a successful load replaces them with the real card.
 const QUOTES = [
-  { text: "I'm not saying it's a bug. I'm saying it's an undocumented feature with commitment issues.", context: "Sprint retro, March 2025", by: "Priya" },
-  { text: "Let's take this offline. And by offline, I mean the pub.", context: "Every Thursday at 4:55pm", by: "Tom" },
-  { text: "My calendar isn't a schedule. It's a list of suggestions.", context: "Explaining a missed 1:1", by: "Lena" },
-  { text: "If the coffee machine goes down, I'm declaring a Scope 1 emergency.", context: "Kitchen, most mornings", by: "Marcus" },
-  { text: "Every spreadsheet is a pivot table if you believe in yourself.", context: "Quarterly planning", by: "Aisha" },
-  { text: "Just one quick question.", context: "Said before a 45-minute call", by: "The data team" },
-  { text: "I've muted myself so hard I can't hear my own thoughts.", context: "All-hands, June 2026", by: "Priya" }
+  { id: 'x1', text: "I'm not saying it's a bug. I'm saying it's an undocumented feature with commitment issues." },
+  { id: 'x2', text: "Let's take this offline. And by offline, I mean the pub." },
+  { id: 'x3', text: "My calendar isn't a schedule. It's a list of suggestions." },
+  { id: 'x4', text: "If the coffee machine goes down, I'm declaring a Scope 1 emergency." },
+  { id: 'x5', text: "Every spreadsheet is a pivot table if you believe in yourself." },
+  { id: 'x6', text: "Just one quick question." },
+  { id: 'x7', text: "I've muted myself so hard I can't hear my own thoughts." }
 ];
 const MESSAGES = [
-  { id: 'm1', type: 'text', name: 'Priya Shah', role: 'Product design', text: "Four years of pairing, pixel-pushing and arguing about button radii. You made every hard problem feel like a fun one. The next team has no idea how lucky they are." },
-  { id: 'm2', type: 'voice', name: 'Tom Okafor', role: 'Engineering', dur: 34, text: "A short song. You were warned." },
-  { id: 'm3', type: 'video', name: 'Lena Fischer', role: 'Customer success', dur: 52, text: "Recorded from the office roof, where you once promised to fix the Wi-Fi." },
-  { id: 'm4', type: 'text', name: 'Marcus Reid', role: 'Data platform', text: "Thanks for always having time for the 'just one quick question'. I'll miss the stand-up jokes more than I'll admit in writing." },
-  { id: 'm5', type: 'voice', name: 'Aisha Rahman', role: 'Partnerships', dur: 65, text: "The full story of the Leeds client visit, finally on record." },
-  { id: 'm6', type: 'video', name: 'The whole data team', role: '12 people, one take', dur: 90, text: "We practised this. It didn't help." }
+  { id: 'm1', type: 'text', name: 'Priya Shah', text: "Four years of pairing, pixel-pushing and arguing about button radii. You made every hard problem feel like a fun one. The next team has no idea how lucky they are." },
+  { id: 'm2', type: 'voice', name: 'Tom Okafor', dur: 34, text: "A short song. You were warned." },
+  { id: 'm3', type: 'video', name: 'Lena Fischer', dur: 52, text: "Recorded from the office roof, where you once promised to fix the Wi-Fi." },
+  { id: 'm4', type: 'text', name: 'Marcus Reid', text: "Thanks for always having time for the 'just one quick question'. I'll miss the stand-up jokes more than I'll admit in writing." },
+  { id: 'm5', type: 'voice', name: 'Aisha Rahman', dur: 65, text: "The full story of the Leeds client visit, finally on record." },
+  { id: 'm6', type: 'video', name: 'The whole data team', dur: 90, text: "We practised this. It didn't help." }
 ];
-const fmt = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+
+const fmt = s => { s = Math.max(0, Math.round(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
 const pad = n => String(n).padStart(2, '0');
-const barsFor = id => { let h = 0; for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0; return Array.from({ length: 36 }, (_, i) => { h = (h * 1103515245 + 12345) >>> 0; return 20 + ((h >>> 16) % 80) * (0.6 + 0.4 * Math.sin(i / 3) ** 2); }); };
+const barsFor = id => { let h = 0; for (const c of String(id)) h = (h * 31 + c.charCodeAt(0)) >>> 0; return Array.from({ length: 36 }, (_, i) => { h = (h * 1103515245 + 12345) >>> 0; return 20 + ((h >>> 16) % 80) * (0.6 + 0.4 * Math.sin(i / 3) ** 2); }); };
+
+// --- card identity + API ------------------------------------------------
+// ?card=<id>  picks the card (matches the api/entries query param)
+// ?view=card  opens the finished card instead of the collect form
+const qs = () => { try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(''); } };
+const CARD = (qs().get('card') || 'joanne').slice(0, 64);
+const API = '/api/entries?card=' + encodeURIComponent(CARD);
+const MAX_VIDEO_SECS = 120;
+const MAX_VOICE_SECS = 300;
+
+const rowToQuote = r => ({ id: r.id, text: r.text, photo: r.photo_url || null });
+const rowToMessage = r => ({
+  id: r.id, type: r.type || 'text', name: r.name || 'Anonymous', text: r.text || '',
+  src: r.media_url || null, photo: r.photo_url || null, dur: Number(r.duration) || 0
+});
+
+const EXT = {
+  'audio/webm': '.webm', 'audio/ogg': '.ogg', 'audio/mp4': '.m4a', 'audio/mpeg': '.mp3', 'audio/wav': '.wav',
+  'video/webm': '.webm', 'video/mp4': '.mp4', 'video/quicktime': '.mov',
+  'image/jpeg': '.jpg', 'image/png': '.png', 'image/gif': '.gif', 'image/webp': '.webp', 'image/heic': '.heic'
+};
+const baseType = f => String((f && f.type) || '').split(';')[0].trim();
+const extFor = f => {
+  const n = (f && f.name) || '', dot = n.lastIndexOf('.');
+  if (dot > 0 && n.length - dot <= 6) return n.slice(dot).toLowerCase();
+  return EXT[baseType(f)] || '';
+};
+
+// The blob client is loaded as a module from <helmet>; wait for it on first use.
+function blobUploader() {
+  if (window.__dcBlobUpload) return Promise.resolve(window.__dcBlobUpload);
+  return new Promise((resolve, reject) => {
+    const t0 = Date.now();
+    (function tick() {
+      if (window.__dcBlobUpload) return resolve(window.__dcBlobUpload);
+      if (Date.now() - t0 > 15000) return reject(new Error('the uploader could not load'));
+      setTimeout(tick, 50);
+    })();
+  });
+}
+
+async function putFile(file, folder) {
+  const upload = await blobUploader();
+  const res = await upload(CARD + '/' + folder + '/' + Date.now() + extFor(file), file, {
+    access: 'public',
+    handleUploadUrl: '/api/upload',
+    contentType: baseType(file) || undefined
+  });
+  return res.url;
+}
+
+async function postEntry(body) {
+  const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+  if (!r.ok) {
+    let msg = 'HTTP ' + r.status;
+    try { const j = await r.json(); if (j && j.error) msg = j.error; } catch (e) {}
+    throw new Error(msg);
+  }
+}
+
+const recMime = video => {
+  const list = video
+    ? ['video/mp4;codecs=h264,aac', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4']
+    : ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+  if (typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) return '';
+  return list.find(t => { try { return MediaRecorder.isTypeSupported(t); } catch (e) { return false; } }) || '';
+};
 
 class Component extends DCLogic {
   state = {
-    view: this.cardOnly() ? 'card' : (this.props.view ?? 'card'), qi: 0, mi: 0, drag: null,
-    playing: null, t: 0, copied: false, sent: false,
+    view: this.cardOnly() ? 'card' : (this.urlView() || this.props.view || 'card'), qi: 0, mi: 0, drag: null,
+    playing: null, t: 0, durs: {}, copied: false, sent: false,
+    demo: true,
     quotes: QUOTES, messages: MESSAGES,
-    qText: '', qContext: '', qBy: '', qNote: '',
-    mName: '', mType: 'text', mText: '', rec: 'idle', recSecs: 0, video: null, mNote: '', qPhoto: null, mPhoto: null, lightbox: null
+    qText: '', qNote: '', qBusy: false, qPhoto: null,
+    mName: '', mType: 'text', mText: '', mNote: '', mNoteErr: false, mBusy: false, mPhoto: null,
+    rec: 'idle', recSecs: 0, recErr: '', recBlob: null, recUrl: null, recStream: null,
+    video: null, lightbox: null
   };
+  urlView() { const v = qs().get('view'); return v === 'card' || v === 'collect' ? v : null; }
   cardOnly() {
     if (this.props.cardOnly) return true;
-    try { const q = new URLSearchParams(window.location.search); return q.get('view') === 'card' || q.has('card'); } catch (e) { return false; }
+    return this.urlView() === 'card';
   }
   fileRef = React.createRef();
   qPhotoRef = React.createRef();
   mPhotoRef = React.createRef();
+  audios = {};
+  alive = true;
+  set(update) { if (this.alive) this.setState(update); }
+
+  // --- load ---------------------------------------------------------------
+  async load() {
+    try {
+      const r = await fetch(API, { headers: { accept: 'application/json' } });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const d = await r.json();
+      if (!this.alive) return;
+      this.stopPlay();
+      this.set({
+        demo: false, qi: 0, mi: 0,
+        quotes: (d.quotes || []).map(rowToQuote),
+        messages: (d.messages || []).map(rowToMessage)
+      });
+    } catch (e) {
+      // No API here (design preview, or the deploy isn't up) — keep the examples.
+    }
+  }
+
   photoVals(p) {
     const key = p + 'Photo', ref = this[p + 'PhotoRef'], cur = this.state[key];
     return {
       [p + 'HasPhoto']: !!cur, [p + 'NoPhoto']: !cur, [p + 'PhotoBg']: cur ? 'url("' + cur.url + '")' : 'none', [p + 'PhotoRef']: ref,
       [p + 'PickPhoto']: () => ref.current && ref.current.click(),
-      [p + 'RemovePhoto']: () => { if (ref.current) ref.current.value = ''; this.setState({ [key]: null }); },
-      [p + 'OnPhoto']: e => { const f = e.target.files && e.target.files[0]; if (f) this.setState({ [key]: { name: f.name, url: URL.createObjectURL(f) } }); }
+      [p + 'RemovePhoto']: () => {
+        if (ref.current) ref.current.value = '';
+        if (cur) try { URL.revokeObjectURL(cur.url); } catch (e) {}
+        this.setState({ [key]: null });
+      },
+      [p + 'OnPhoto']: e => {
+        const f = e.target.files && e.target.files[0];
+        if (f) this.setState({ [key]: { name: f.name, url: URL.createObjectURL(f), file: f } });
+      }
     };
   }
   palette = [
@@ -349,13 +480,24 @@ class Component extends DCLogic {
   }
 
   componentDidUpdate(prev) { if (prev.view !== this.props.view && this.props.view && !this.cardOnly()) this.setState({ view: this.props.view }); }
-  componentDidMount() { this.onKey = e => { if (e.key === 'Escape' && this.state.lightbox) this.setState({ lightbox: null }); }; window.addEventListener('keydown', this.onKey); }
-  componentWillUnmount() { clearInterval(this.playTimer); clearInterval(this.recTimer); window.removeEventListener('keydown', this.onKey); }
+  componentDidMount() {
+    this.onKey = e => { if (e.key === 'Escape' && this.state.lightbox) this.setState({ lightbox: null }); };
+    window.addEventListener('keydown', this.onKey);
+    this.load();
+  }
+  componentWillUnmount() {
+    this.alive = false;
+    clearInterval(this.playTimer); clearInterval(this.recTimer);
+    window.removeEventListener('keydown', this.onKey);
+    Object.values(this.audios).forEach(a => { try { a.pause(); } catch (e) {} });
+    this.stopStream();
+    if (this.state.recUrl) try { URL.revokeObjectURL(this.state.recUrl); } catch (e) {}
+  }
   openPhoto(url) { if (Math.abs(this.lastDx || 0) > 6) return; this.setState({ lightbox: url }); }
 
   swipe(panel, len) {
     const key = panel === 'q' ? 'qi' : 'mi';
-    const go = i => { this.stopPlay(); this.setState({ [key]: (i + len) % len }); };
+    const go = i => { if (len < 1) return; this.stopPlay(); this.setState({ [key]: ((i % len) + len) % len }); };
     return {
       down: e => (this.lastDx = 0, this.setState({ drag: { panel, x: e.clientX, dx: 0 } })),
       move: e => { const d = this.state.drag; if (d && d.panel === panel) this.setState({ drag: { ...d, dx: e.clientX - d.x } }); },
@@ -366,113 +508,284 @@ class Component extends DCLogic {
     };
   }
 
-  stopPlay() { clearInterval(this.playTimer); if (this.state.playing) this.setState({ playing: null, t: 0 }); }
-  togglePlay(m) {
-    if (this.state.playing === m.id) { clearInterval(this.playTimer); this.setState({ playing: null }); return; }
+  // --- playback -----------------------------------------------------------
+  audioFor(m) {
+    let a = this.audios[m.id];
+    if (!a) {
+      a = this.audios[m.id] = new Audio(m.src);
+      a.preload = 'metadata';
+      a.addEventListener('timeupdate', () => { if (this.state.playing === m.id) this.set({ t: a.currentTime }); });
+      a.addEventListener('ended', () => this.set({ playing: null, t: 0 }));
+      a.addEventListener('loadedmetadata', () => {
+        if (isFinite(a.duration) && a.duration > 0) this.set(s => ({ durs: { ...s.durs, [m.id]: a.duration } }));
+      });
+    }
+    return a;
+  }
+  stopPlay() {
     clearInterval(this.playTimer);
-    this.setState(s => ({ playing: m.id, t: s.playing === m.id ? s.t : 0 }));
+    Object.values(this.audios).forEach(a => { try { a.pause(); a.currentTime = 0; } catch (e) {} });
+    if (this.state.playing) this.setState({ playing: null, t: 0 });
+  }
+  togglePlay(m) {
+    // Real recordings drive the waveform off the <audio> element; the built-in
+    // examples have no file, so they fall back to the simulated timer.
+    if (m.type === 'voice' && m.src) {
+      const a = this.audioFor(m);
+      if (this.state.playing === m.id) { a.pause(); this.setState({ playing: null }); return; }
+      this.stopPlay();
+      this.setState({ playing: m.id, t: a.currentTime || 0 });
+      a.play().catch(() => this.set({ playing: null }));
+      return;
+    }
+    if (this.state.playing === m.id) { clearInterval(this.playTimer); this.setState({ playing: null }); return; }
+    this.stopPlay();
+    const dur = m.dur || 30;
+    this.setState({ playing: m.id, t: 0 });
     this.playTimer = setInterval(() => {
       this.setState(s => {
         const t = s.t + 0.1;
-        if (t >= m.dur) { clearInterval(this.playTimer); return { playing: null, t: 0 }; }
+        if (t >= dur) { clearInterval(this.playTimer); return { playing: null, t: 0 }; }
         return { t };
       });
     }, 100);
   }
 
-  toggleRec = () => {
-    if (this.state.rec === 'rec') { clearInterval(this.recTimer); this.setState({ rec: 'done' }); return; }
-    this.setState({ rec: 'rec', recSecs: 0, video: null });
-    this.recTimer = setInterval(() => this.setState(s => ({ recSecs: s.recSecs + 1 })), 1000);
+  // --- recording ----------------------------------------------------------
+  stopStream() {
+    if (this.stream) { try { this.stream.getTracks().forEach(t => t.stop()); } catch (e) {} this.stream = null; }
+  }
+  stopRec() {
+    clearInterval(this.recTimer);
+    if (this.mr && this.mr.state !== 'inactive') { try { this.mr.stop(); return; } catch (e) {} }
+    this.setState({ rec: this.state.recBlob ? 'done' : 'idle', recStream: null });
+    this.stopStream();
+  }
+  toggleRec = async () => {
+    if (this.state.rec === 'rec') { this.stopRec(); return; }
+    const wantVideo = this.state.mType === 'video';
+    const cap = wantVideo ? MAX_VIDEO_SECS : MAX_VOICE_SECS;
+    if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      this.setState({ recErr: 'This browser can’t record here. Upload a file instead.' });
+      return;
+    }
+    if (this.state.recUrl) try { URL.revokeObjectURL(this.state.recUrl); } catch (e) {}
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(
+        wantVideo ? { video: { facingMode: 'user' }, audio: true } : { audio: true }
+      );
+      if (!this.alive) { stream.getTracks().forEach(t => t.stop()); return; }
+      this.stream = stream;
+      const mime = recMime(wantVideo);
+      const mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+      this.mr = mr;
+      const chunks = [];
+      mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+      mr.onstop = () => {
+        clearInterval(this.recTimer);
+        this.stopStream();
+        const type = String(mr.mimeType || mime || '').split(';')[0] || (wantVideo ? 'video/webm' : 'audio/webm');
+        const blob = new Blob(chunks, { type });
+        this.set({ rec: 'done', recBlob: blob, recUrl: URL.createObjectURL(blob), recStream: null });
+      };
+      mr.start();
+      this.setState({
+        rec: 'rec', recSecs: 0, recErr: '', recBlob: null, recUrl: null, video: null,
+        recStream: wantVideo ? stream : null
+      });
+      this.recTimer = setInterval(() => this.setState(s => {
+        const recSecs = s.recSecs + 1;
+        if (recSecs >= cap) setTimeout(() => this.stopRec(), 0);
+        return { recSecs };
+      }), 1000);
+    } catch (e) {
+      const blocked = e && (e.name === 'NotAllowedError' || e.name === 'SecurityError');
+      this.setState({
+        rec: 'idle', recStream: null,
+        recErr: blocked
+          ? (wantVideo ? 'Camera and microphone access was blocked.' : 'Microphone access was blocked.')
+          : (wantVideo ? 'No camera found. Upload a video instead.' : 'No microphone found.')
+      });
+    }
   };
 
-  resetForm(extra) { clearInterval(this.recTimer); this.setState({ mText: '', rec: 'idle', recSecs: 0, video: null, ...extra }); }
+  resetForm(extra) {
+    clearInterval(this.recTimer);
+    if (this.mr && this.mr.state !== 'inactive') { this.mr.onstop = null; try { this.mr.stop(); } catch (e) {} }
+    this.mr = null;
+    this.stopStream();
+    if (this.state.recUrl) try { URL.revokeObjectURL(this.state.recUrl); } catch (e) {}
+    if (this.state.video && this.state.video.url) try { URL.revokeObjectURL(this.state.video.url); } catch (e) {}
+    if (this.fileRef.current) this.fileRef.current.value = '';
+    this.setState({ mText: '', rec: 'idle', recSecs: 0, recErr: '', recBlob: null, recUrl: null, recStream: null, video: null, ...extra });
+  }
 
-  addMessage = () => {
+  // --- saving -------------------------------------------------------------
+  addMessage = async () => {
     const s = this.state;
-    const hasMedia = s.mType === 'voice' ? s.rec === 'done' : s.mType === 'video' ? (s.video || s.rec === 'done') : true;
-    const m = { id: 'u' + Date.now(), type: hasMedia ? s.mType : 'text', name: s.mName.trim() || 'Anonymous', role: 'Added just now', text: s.mText.trim() };
-    if (m.type !== 'text') m.dur = s.recSecs || 30;
-    if (m.type === 'video' && s.video) m.src = s.video.url;
-    if (s.mPhoto) m.photo = s.mPhoto.url;
-    if (m.type !== 'text' && !m.text) m.text = m.type === 'voice' ? 'Voice message' : 'Video message';
-    this.resetForm({ messages: [...s.messages, m], mNote: s.mName.trim() ? `Thanks, ${m.name.split(' ')[0]} — your message is in.` : 'Thanks — your message is in.', mName: '', mPhoto: null });
+    if (s.mBusy) return;
+    const hasMedia = s.mType === 'voice' ? !!s.recBlob : s.mType === 'video' ? !!(s.video || s.recBlob) : true;
+    const type = hasMedia ? s.mType : 'text';
+    const name = s.mName.trim() || 'Anonymous';
+    let text = s.mText.trim();
+    if (type !== 'text' && !text) text = type === 'voice' ? 'Voice message' : 'Video message';
+    const duration = type === 'text' ? null : (s.recSecs || null);
+    const mediaFile = type === 'text' ? null : (s.recBlob || (s.video && s.video.file) || null);
+
+    this.setState({ mBusy: true, mNote: 'Saving…', mNoteErr: false });
+    let media_url = null, photo_url = null;
+    try {
+      if (mediaFile) {
+        this.set({ mNote: type === 'voice' ? 'Uploading your recording…' : 'Uploading your video…' });
+        media_url = await putFile(mediaFile, type === 'voice' ? 'voice' : 'video');
+      }
+      if (s.mPhoto) {
+        this.set({ mNote: 'Uploading your photo…' });
+        photo_url = await putFile(s.mPhoto.file, 'photos');
+      }
+      await postEntry({ kind: 'message', type, name, text, media_url, photo_url, duration });
+    } catch (err) {
+      if (!s.demo) {
+        this.set({ mBusy: false, mNote: 'Couldn’t send that — ' + (err.message || 'please try again.'), mNoteErr: true });
+        return;
+      }
+      // Preview with no API behind it: keep the interaction working locally.
+      media_url = media_url || (s.recUrl || (s.video && s.video.url) || null);
+      photo_url = photo_url || (s.mPhoto ? s.mPhoto.url : null);
+    }
+
+    const m = { id: 'u' + Date.now(), type, name, text, src: media_url, photo: photo_url, dur: duration || 0 };
+    if (this.mPhotoRef.current) this.mPhotoRef.current.value = '';
+    this.resetForm({
+      messages: [...this.state.messages, m],
+      mBusy: false, mNoteErr: false,
+      mNote: s.mName.trim() ? `Thanks, ${name.split(' ')[0]} — your message is in.` : 'Thanks — your message is in.',
+      mName: '', mPhoto: null
+    });
   };
 
-  addQuote = () => {
+  addQuote = async () => {
     const s = this.state;
-    const q = { text: s.qText.trim().replace(/^[“"]|[”"]$/g, ''), context: '', by: '', photo: s.qPhoto ? s.qPhoto.url : null };
-    this.setState({ quotes: [...s.quotes, q], qPhoto: null, qText: '', qContext: '', qNote: `Added. That's ${s.quotes.length + 1} quotes so far.` });
+    if (s.qBusy) return;
+    const text = s.qText.trim().replace(/^[“"]|[”"]$/g, '');
+    if (!text) return;
+
+    this.setState({ qBusy: true, qNote: 'Saving…' });
+    let photo_url = null;
+    try {
+      if (s.qPhoto) { this.set({ qNote: 'Uploading your photo…' }); photo_url = await putFile(s.qPhoto.file, 'photos'); }
+      await postEntry({ kind: 'quote', text, photo_url });
+    } catch (err) {
+      if (!s.demo) {
+        this.set({ qBusy: false, qNote: 'Couldn’t save that — ' + (err.message || 'please try again.') });
+        return;
+      }
+      photo_url = photo_url || (s.qPhoto ? s.qPhoto.url : null);
+    }
+
+    if (this.qPhotoRef.current) this.qPhotoRef.current.value = '';
+    const count = this.state.quotes.length + 1;
+    this.set({
+      quotes: [...this.state.quotes, { id: 'u' + Date.now(), text, photo: photo_url }],
+      qPhoto: null, qText: '', qBusy: false,
+      qNote: `Added. That's ${count} quote${count === 1 ? '' : 's'} so far.`
+    });
   };
 
   dots(len, cur, go, on, off) {
     return Array.from({ length: len }, (_, i) => ({ w: i === cur ? '24px' : '8px', bg: i === cur ? on : off, go: () => go(i) }));
   }
 
+  shareUrl(view) {
+    const tail = '?card=' + encodeURIComponent(CARD) + '&view=' + view;
+    try { return window.location.origin + window.location.pathname + tail; } catch (e) { return tail; }
+  }
+  copyToClipboard(url) { try { navigator.clipboard.writeText(url); } catch (e) {} }
+
   renderVals() {
     const s = this.state;
     const name = this.props.recipientName ?? 'Joanne';
     const isCard = this.cardOnly() || s.view === 'card';
-    const qs = this.swipe('q', s.quotes.length), ms = this.swipe('m', s.messages.length);
-    const qi = Math.min(s.qi, s.quotes.length - 1), mi = Math.min(s.mi, s.messages.length - 1);
+    const qLen = s.quotes.length, mLen = s.messages.length;
+    const qs_ = this.swipe('q', qLen), ms = this.swipe('m', mLen);
+    const qi = Math.max(0, Math.min(s.qi, qLen - 1)), mi = Math.max(0, Math.min(s.mi, mLen - 1));
     const qCol = this.colorFor(isCard ? qi : 0);
     const dq = s.drag && s.drag.panel === 'q', dm = s.drag && s.drag.panel === 'm';
     const tr = d => d ? 'none' : 'transform 320ms cubic-bezier(0.2,0,0,1)';
     const tf = (i, d) => `translateX(calc(${-i * 100}% + ${d ? s.drag.dx : 0}px))`;
     const typeLabel = { text: 'Note', voice: 'Voice note', video: 'Video' };
+    const mediaStyle = { width: '100%', aspectRatio: '16 / 9', borderRadius: 'var(--radius-xl)', background: 'var(--neutral-950)', display: 'block' };
 
     const messages = s.messages.map(m => {
       const active = s.playing === m.id;
-      const t = active || (s.playing === null && s.t > 0 && false) ? s.t : 0;
-      const frac = m.dur ? t / m.dur : 0;
+      const t = active ? s.t : 0;
+      const dur = s.durs[m.id] || m.dur || 0;
+      const frac = dur ? Math.min(1, t / dur) : 0;
       return {
         ...m, typeLabel: m.photo && !m.text ? 'Photo' : typeLabel[m.type], hasPhoto: !!m.photo, photoBg: m.photo ? 'url("' + m.photo + '")' : 'none', openPhoto: () => this.openPhoto(m.photo),
         isText: m.type === 'text', isVoice: m.type === 'voice', isVideo: m.type === 'video',
-        hasSrc: !!m.src, videoEl: m.src ? React.createElement('video', { key: m.src, src: m.src, controls: true, playsInline: true, style: { width: '100%', aspectRatio: '16 / 9', borderRadius: 'var(--radius-xl)', background: 'var(--neutral-950)', display: 'block' } }) : null, noSrc: !m.src,
+        hasSrc: !!m.src, noSrc: !m.src,
+        videoEl: m.src ? React.createElement('video', { key: m.src, src: m.src, controls: true, playsInline: true, preload: 'metadata', style: mediaStyle }) : null,
         playing: active, paused: !active,
         toggle: () => this.togglePlay(m),
-        time: active ? `${fmt(t)} / ${fmt(m.dur)}` : fmt(m.dur || 0),
+        time: active ? `${fmt(t)} / ${fmt(dur)}` : fmt(dur),
         pct: (frac * 100).toFixed(1) + '%',
         bars: m.type === 'voice' ? barsFor(m.id).map((h, i, a) => ({ h: h.toFixed(0) + '%', bg: i / a.length < frac ? 'var(--tangerine)' : 'var(--neutral-400)' })) : []
       };
     });
 
     const needsMedia = s.mType !== 'text';
-    const hasMedia = s.mType === 'voice' ? s.rec === 'done' : (s.video || s.rec === 'done');
+    const hasMedia = s.mType === 'voice' ? !!s.recBlob : !!(s.video || s.recBlob);
+    const previewSrc = s.recUrl || (s.video && s.video.url) || null;
+    const videoPreview = s.mType === 'video' && (s.recStream || previewSrc)
+      ? React.createElement('video', {
+          key: s.recStream ? 'live' : previewSrc,
+          src: s.recStream ? undefined : previewSrc,
+          ref: el => { if (el && el.srcObject !== (s.recStream || null)) el.srcObject = s.recStream || null; },
+          autoPlay: !!s.recStream, muted: !!s.recStream, playsInline: true, controls: !s.recStream,
+          style: { ...mediaStyle, maxHeight: '260px', objectFit: 'cover' }
+        })
+      : null;
 
     return {
       name, isCard, isCollect: !isCard, view: s.view,
       viewItems: [{ value: 'card', label: 'Card' }, { value: 'collect', label: 'Collect messages' }],
       setView: v => { this.stopPlay(); this.setState({ view: v }); },
-      quoteCount: s.quotes.length, msgCount: s.messages.length,
+      quoteCount: qLen, msgCount: mLen,
       msgTitle: isCard ? `Messages for ${name}` : 'Leave a message',
+      emptyHint: s.demo ? 'Entries will appear here once the card is live.' : 'Share the collect link and the first one will land here.',
 
-      quotes: s.quotes.map(q => ({ ...q, hasPhoto: !!q.photo, photoBg: q.photo ? 'url("' + q.photo + '")' : 'none', openPhoto: () => this.openPhoto(q.photo) })), ...this.photoVals('q'), hasLightbox: !!s.lightbox, lightboxBg: s.lightbox ? 'url("' + s.lightbox + '")' : 'none', closeLightbox: () => this.setState({ lightbox: null }), ...this.photoVals('m'), qCounter: `${pad(qi + 1)} / ${pad(s.quotes.length)}`,
+      quotes: s.quotes.map(q => ({ ...q, hasPhoto: !!q.photo, photoBg: q.photo ? 'url("' + q.photo + '")' : 'none', openPhoto: () => this.openPhoto(q.photo) })),
+      ...this.photoVals('q'), ...this.photoVals('m'),
+      hasLightbox: !!s.lightbox, lightboxBg: s.lightbox ? 'url("' + s.lightbox + '")' : 'none', closeLightbox: () => this.setState({ lightbox: null }),
+      qHasItems: isCard && qLen > 0, qEmpty: isCard && qLen === 0,
+      mHasItems: isCard && mLen > 0, mEmpty: isCard && mLen === 0,
+      qCounter: `${pad(qi + 1)} / ${pad(qLen)}`,
       qTransform: tf(qi, dq), qTransition: tr(dq),
-      qDown: qs.down, qMove: qs.move, qUp: qs.up, qPrev: qs.prev, qNext: qs.next,
-      qDots: this.dots(s.quotes.length, qi, qs.go, qCol.dark ? '#2B1F22' : '#FFFFFF', qCol.dark ? 'rgba(43,31,34,0.25)' : 'rgba(255,255,255,0.35)'),
+      qDown: qs_.down, qMove: qs_.move, qUp: qs_.up, qPrev: qs_.prev, qNext: qs_.next,
+      qDots: this.dots(qLen, qi, qs_.go, qCol.dark ? '#2B1F22' : '#FFFFFF', qCol.dark ? 'rgba(43,31,34,0.25)' : 'rgba(255,255,255,0.35)'),
       qBg: qCol.bg, qFg: qCol.dark ? '#2B1F22' : '#FFFFFF',
 
-      messages, mCounter: `${pad(mi + 1)} / ${pad(s.messages.length)}`,
+      messages, mCounter: `${pad(mi + 1)} / ${pad(mLen)}`,
       mTransform: tf(mi, dm), mTransition: tr(dm),
       mDown: ms.down, mMove: ms.move, mUp: ms.up, mPrev: ms.prev, mNext: ms.next,
-      mDots: this.dots(s.messages.length, mi, ms.go, 'var(--neutral-950)', 'var(--neutral-200)'),
+      mDots: this.dots(mLen, mi, ms.go, 'var(--neutral-950)', 'var(--neutral-200)'),
 
-      shareLink: `423.io/farewell/${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-k7x2`,
+      shareLink: this.shareUrl('collect').replace(/^https?:\/\//, ''),
       copyLabel: s.copied ? 'Copied' : 'Copy link',
-      copyLink: () => { try { navigator.clipboard.writeText('https://' + `423.io/farewell/${name.toLowerCase()}-k7x2`); } catch (e) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1800); },
+      copyLink: () => { this.copyToClipboard(this.shareUrl('collect')); this.setState({ copied: true }); setTimeout(() => this.set({ copied: false }), 1800); },
       sendLabel: s.sent ? 'Link copied' : `Copy ${name}'s link`,
-      sendCard: () => { const u = window.location.origin + window.location.pathname + '?view=card'; try { navigator.clipboard.writeText(u); } catch (e) {} this.setState({ sent: true }); setTimeout(() => this.setState({ sent: false }), 1800); },
+      sendCard: () => { this.copyToClipboard(this.shareUrl('card')); this.setState({ sent: true }); setTimeout(() => this.set({ sent: false }), 1800); },
       showToggle: !this.cardOnly(),
 
-      qText: s.qText, qContext: s.qContext, qBy: s.qBy, qNote: s.qNote,
+      qText: s.qText, qNote: s.qNote,
       onQText: e => this.setState({ qText: e.target.value, qNote: '' }),
-      onQContext: e => this.setState({ qContext: e.target.value }),
-      onQBy: e => this.setState({ qBy: e.target.value }),
-      qInvalid: !s.qText.trim(),
+      qInvalid: s.qBusy || !s.qText.trim(),
+      qAddLabel: s.qBusy ? 'Saving…' : 'Add quote',
       addQuote: this.addQuote,
 
       mName: s.mName, mText: s.mText, mNote: s.mNote, mType: s.mType,
+      mNoteColor: s.mNoteErr ? 'var(--text-danger, var(--destructive-600))' : 'var(--text-success)',
       onMName: e => this.setState({ mName: e.target.value, mNote: '' }),
       onMText: e => this.setState({ mText: e.target.value }),
       typeItems: [{ value: 'text', label: 'Written' }, { value: 'voice', label: 'Voice' }, { value: 'video', label: 'Video' }],
@@ -481,14 +794,27 @@ class Component extends DCLogic {
       isRecording: s.rec === 'rec', notRecording: s.rec !== 'rec',
       recBg: s.rec === 'rec' ? 'var(--destructive-600)' : 'var(--accent)',
       recTime: fmt(s.recSecs),
-      recHint: s.rec === 'rec' ? 'Recording… tap to stop' : s.rec === 'done' ? 'Got it. Tap to re-record.' : 'Tap to start recording',
+      recHint: s.recErr || (s.rec === 'rec' ? 'Recording… tap to stop' : s.rec === 'done' ? 'Got it. Tap to re-record.' : 'Tap to start recording'),
+      recHintColor: s.recErr ? 'var(--text-danger, var(--destructive-600))' : 'var(--text-muted)',
       toggleRec: this.toggleRec,
+      hasVoicePreview: s.mType === 'voice' && s.rec === 'done' && !!s.recUrl,
+      voicePreviewEl: s.recUrl ? React.createElement('audio', { key: s.recUrl, src: s.recUrl, controls: true, style: { width: '100%', maxWidth: '320px' } }) : null,
+      hasVideoPreview: !!videoPreview, noVideoPreview: !videoPreview, videoPreviewEl: videoPreview,
       videoTitle: s.video ? s.video.name : s.rec === 'rec' ? `Recording ${fmt(s.recSecs)}…` : s.rec === 'done' ? `Recorded ${fmt(s.recSecs)}` : 'Record or upload a video',
+      videoHint: s.recErr || 'MP4 or MOV, up to 2 minutes',
       videoRecLabel: s.rec === 'rec' ? 'Stop recording' : 'Record video',
       fileRef: this.fileRef,
       pickVideo: () => this.fileRef.current && this.fileRef.current.click(),
-      onFile: e => { const f = e.target.files && e.target.files[0]; if (f) { clearInterval(this.recTimer); this.setState({ video: { name: f.name, url: URL.createObjectURL(f) }, rec: 'idle', recSecs: 0 }); } },
-      mInvalid: !s.mPhoto && (!s.mName.trim() || (needsMedia ? !hasMedia : !s.mText.trim())),
+      onFile: e => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        clearInterval(this.recTimer);
+        this.stopStream();
+        if (s.recUrl) try { URL.revokeObjectURL(s.recUrl); } catch (err) {}
+        this.setState({ video: { name: f.name, url: URL.createObjectURL(f), file: f }, rec: 'idle', recSecs: 0, recErr: '', recBlob: null, recUrl: null, recStream: null });
+      },
+      mInvalid: s.mBusy || (!s.mPhoto && (!s.mName.trim() || (needsMedia ? !hasMedia : !s.mText.trim()))),
+      mSendLabel: s.mBusy ? 'Sending…' : 'Send message',
       addMessage: this.addMessage
     };
   }
