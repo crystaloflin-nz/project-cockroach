@@ -1,0 +1,39 @@
+/* ============================================================
+   423 Foundations — Brand Modes
+   The platform is white-labelled. Switch the host brand by
+   setting data-brand on a root element:
+       <html data-brand="natwest">
+   Default (no attribute) = the 423 house brand (electric blue).
+   Each mode only re-points the --primary ramp + brand accents;
+   everything else (neutrals, semantics, type, spacing) is shared.
+   ============================================================ */
+
+/* ---- NAB · red ---------------------------------------------- */
+[data-brand="nab"] {
+  --primary-50:  #fff1f1;
+  --primary-100: #ffdbdc;
+  --primary-200: #ffb2b5;
+  --primary-300: #fd4e54;
+  --primary-400: #fa1e1e;
+  --primary-500: #ed0000;
+  --primary-600: #d10000;
+  --primary-700: #bd0000;
+  --primary-800: #900009;
+  --primary-900: #73000b;
+  --primary-950: #54000b;
+}
+
+/* ---- NatWest · purple --------------------------------------- */
+[data-brand="natwest"] {
+  --primary-50:  #fbf6ff;
+  --primary-100: #f2eaf9;
+  --primary-200: #dcc5e7;
+  --primary-300: #bf9fe0;
+  --primary-400: #be99e6;
+  --primary-500: #5e10b1;
+  --primary-600: #5a287d;
+  --primary-700: #3c1053;
+  --primary-800: #2e0b40;
+  --primary-900: #25082f;
+  --primary-950: #190421;
+}

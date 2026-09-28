@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/tokens/brand-modes.css">
+  <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/tokens/semantic.css">
+  <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/tokens/radius.css">
+  <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/tokens/base.css">
+  <link rel="stylesheet" href="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/styles.css">
+  <script src="_ds/423-foundations-design-system-660c196d-a1eb-4294-be1d-2d0a92ed91d2/_ds_bundle.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&family=Google+Sans+Flex:wght@400..700&display=swap">
+  <style>
+    :root {
+      --primary-50: #FFF6EE; --primary-100: #FFE9D4; --primary-200: #FEDCB8; --primary-300: #FEC196;
+      --primary-400: #AA767C; --primary-500: #63474D; --primary-600: #52393F; --primary-700: #422D32;
+      --primary-800: #332226; --primary-900: #251819; --primary-950: #180F11;
+      --neutral-50: #FFFAF6; --neutral-100: #FBF1EA; --neutral-200: #F3E3D9; --neutral-300: #EBD3C4;
+      --neutral-400: #D6A184; --neutral-500: #93676C; --neutral-600: #7A5A5F; --neutral-650: #6E4F54;
+      --neutral-700: #4E3A3E; --neutral-800: #433236; --neutral-900: #3A2A2E; --neutral-950: #2B1F22;
+      --tangerine: #FFA686;
+      --sunflower: #EFB32F;
+      --font-heading: "Google Sans", "Google Sans Flex", "Figtree", system-ui, sans-serif;
+    }
+    body { margin: 0; background: var(--surface-page); }
+    a { color: var(--text-link); } a:hover { color: var(--accent-pressed); }
+    textarea::placeholder { color: var(--text-subtle); }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: var(--surface-page); font-family: var(--font-body); color: var(--text-base); padding: 32px 24px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; max-width: 1280px; margin: 0 auto;">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+    <div style="font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);">Farewell card · Your 365 days at 423</div>
+    <sc-if value="{{ showToggle }}" hint-placeholder-val="{{ true }}">
+      <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Tabs" variant="segmented" items="{{ viewItems }}" value="{{ view }}" on-change="{{ setView }}" hint-size="260px,36px"></x-import>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <h1 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(36px, 5vw, 56px); letter-spacing: -0.025em; line-height: 1.05;">We'll miss you {{ name }}</h1>
+      <p style="margin: 0; font-size: var(--text-lg); color: var(--text-muted); text-wrap: pretty;">Things we #overheard from {{ name }}, and messages from the team.</p>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isCollect }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <h1 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(32px, 4vw, 44px); letter-spacing: -0.02em; line-height: 1.1;">Collect messages for {{ name }}</h1>
+        <p style="margin: 0; font-size: var(--text-base); color: var(--text-muted); max-width: 640px; text-wrap: pretty;">Share the link. Anyone with it can add a quote or leave a written, voice or video message. {{ name }} won't see anything until you send the card.</p>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 12px;">
+        <div style="flex: 1 1 260px; min-width: 0; display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 40px; border: 1px solid var(--border-default); border-radius: var(--radius-md); background: var(--surface-muted); color: var(--text-base); font-family: var(--font-mono); font-size: var(--text-sm);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; color: var(--icon-muted);"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ shareLink }}</span>
+        </div>
+        <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="secondary" on-click="{{ copyLink }}" hint-size="120px,40px">{{ copyLabel }}</x-import>
+        <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="primary" on-click="{{ sendCard }}" hint-size="140px,40px">{{ sendLabel }}</x-import>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 24px; align-items: stretch;">
+
+    <!-- LEFT: quotes -->
+    <div style="background: {{ qBg }}; color: {{ qFg }}; transition: background-color 320ms cubic-bezier(0.2,0,0,1), color 320ms cubic-bezier(0.2,0,0,1); border-radius: var(--radius-2xl); padding: 32px; display: flex; flex-direction: column; gap: 24px; min-height: 560px; box-sizing: border-box; overflow: hidden;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+        <div style="font-family: var(--font-heading); font-weight: 500; font-size: var(--text-2xl); letter-spacing: -0.018em;">Things {{ name }} said</div>
+        <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+          <div style="font-family: var(--font-mono); font-size: var(--text-sm); font-feature-settings: 'tnum' 1;">{{ qCounter }}</div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+        <div onPointerDown="{{ qDown }}" onPointerMove="{{ qMove }}" onPointerUp="{{ qUp }}" onPointerLeave="{{ qUp }}" style="flex: 1; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; display: flex;">
+          <div style="display: flex; width: 100%; transform: {{ qTransform }}; transition: {{ qTransition }};">
+            <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="1">
+              <div style="flex: 0 0 100%; box-sizing: border-box; padding-right: 8px; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
+                <sc-if value="{{ q.hasPhoto }}" hint-placeholder-val="{{ false }}"><div onClick="{{ q.openPhoto }}" role="button" aria-label="View photo full size" style="cursor: zoom-in; width: 100%; height: 220px; flex: none; background-image: {{ q.photoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-xl);"></div></sc-if>
+                <div style="font-family: var(--font-heading); font-weight: 500; font-size: 96px; line-height: 0.6; height: 40px;">“</div>
+                <div style="font-family: var(--font-heading); font-weight: 500; font-size: clamp(28px, 3vw, 40px); line-height: 1.15; letter-spacing: -0.02em; text-wrap: pretty;">{{ q.text }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <sc-for list="{{ qDots }}" as="d" hint-placeholder-count="7">
+              <button onClick="{{ d.go }}" aria-label="Go to quote" style="width: {{ d.w }}; height: 8px; border-radius: var(--radius-full); border: none; padding: 0; cursor: pointer; background: {{ d.bg }}; transition: width 200ms cubic-bezier(0.2,0,0,1);"></button>
+            </sc-for>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="secondary" size="small" on-click="{{ qPrev }}" aria-label="Previous quote" hint-size="36px,32px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></x-import>
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="secondary" size="small" on-click="{{ qNext }}" aria-label="Next quote" hint-size="36px,32px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></x-import>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCollect }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 16px; flex: 1;">
+          <p style="margin: 0; font-size: var(--text-base); text-wrap: pretty;">Heard {{ name }} say something that stuck? Add it here — word for word if you can.</p>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: var(--text-sm); font-weight: 500;">The quote
+            <textarea value="{{ qText }}" onChange="{{ onQText }}" rows="4" placeholder="“Let's take this offline…”" style="font-family: var(--font-heading); font-weight: 500; font-size: var(--text-xl); line-height: 1.3; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); background: var(--surface-card); color: var(--text-base); resize: vertical; outline: none;"></textarea>
+          </label>
+          <sc-if value="{{ qHasPhoto }}" hint-placeholder-val="{{ false }}">
+            <div style="position: relative;">
+              <div role="img" aria-label="Uploaded photo" style="width: 100%; height: 200px; background-image: {{ qPhotoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-lg);"></div>
+              <button onClick="{{ qRemovePhoto }}" aria-label="Remove photo" style="position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border-radius: var(--radius-full); border: none; background: var(--neutral-0); color: var(--neutral-950); display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ qNoPhoto }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ qPickPhoto }}" style="height: 56px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px dashed currentColor; border-radius: var(--radius-lg); background: transparent; color: inherit; font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500; cursor: pointer;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>Add a photo (optional)
+            </button>
+          </sc-if>
+          <input type="file" accept="image/*" ref="{{ qPhotoRef }}" onChange="{{ qOnPhoto }}" style="display: none;">
+          <div style="margin-top: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="secondary" disabled="{{ qInvalid }}" on-click="{{ addQuote }}" hint-size="120px,40px">Add quote</x-import>
+            <div style="font-size: var(--text-sm); font-weight: 500;">{{ qNote }}</div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- RIGHT: messages -->
+    <div style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-2xl); padding: 32px; display: flex; flex-direction: column; gap: 24px; min-height: 560px; box-sizing: border-box; overflow: hidden;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+        <div style="font-family: var(--font-heading); font-weight: 500; font-size: var(--text-2xl); letter-spacing: -0.018em;">{{ msgTitle }}</div>
+        <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+          <div style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted); font-feature-settings: 'tnum' 1;">{{ mCounter }}</div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+        <div onPointerDown="{{ mDown }}" onPointerMove="{{ mMove }}" onPointerUp="{{ mUp }}" onPointerLeave="{{ mUp }}" style="flex: 1; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; display: flex;">
+          <div style="display: flex; width: 100%; transform: {{ mTransform }}; transition: {{ mTransition }};">
+            <sc-for list="{{ messages }}" as="m" hint-placeholder-count="1">
+              <div style="flex: 0 0 100%; box-sizing: border-box; padding-right: 8px; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Avatar" name="{{ m.name }}" size="md" hint-size="40px,40px"></x-import>
+                  <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;">
+                    <div style="font-weight: 600; font-size: var(--text-base);">{{ m.name }}</div>
+                  </div>
+                  <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Badge" hint-size="80px,24px">{{ m.typeLabel }}</x-import>
+                </div>
+                <sc-if value="{{ m.hasPhoto }}" hint-placeholder-val="{{ false }}"><div onClick="{{ m.openPhoto }}" role="button" aria-label="View photo full size" style="cursor: zoom-in; width: 100%; height: 220px; flex: none; background-image: {{ m.photoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-xl);"></div></sc-if>
+
+                <sc-if value="{{ m.isText }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-size: clamp(20px, 2vw, 24px); line-height: 1.45; color: var(--text-base); text-wrap: pretty;">{{ m.text }}</div>
+                </sc-if>
+
+                <sc-if value="{{ m.isVoice }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; align-items: center; gap: 16px; padding: 20px; background: var(--surface-muted); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl);">
+                      <button onClick="{{ m.toggle }}" aria-label="Play voice message" style="flex: none; width: 48px; height: 48px; border-radius: var(--radius-full); border: none; background: var(--accent); color: var(--accent-foreground); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                        <sc-if value="{{ m.playing }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="14" y="4" width="4" height="16" rx="1"></rect><rect x="6" y="4" width="4" height="16" rx="1"></rect></svg></sc-if>
+                        <sc-if value="{{ m.paused }}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"></polygon></svg></sc-if>
+                      </button>
+                      <div style="flex: 1; min-width: 0; height: 48px; display: flex; align-items: center; gap: 3px;">
+                        <sc-for list="{{ m.bars }}" as="b" hint-placeholder-count="36">
+                          <div style="flex: 1; min-width: 2px; border-radius: 2px; height: {{ b.h }}; background: {{ b.bg }};"></div>
+                        </sc-for>
+                      </div>
+                      <div style="flex: none; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted); font-feature-settings: 'tnum' 1;">{{ m.time }}</div>
+                    </div>
+                    <div style="font-size: var(--text-base); color: var(--text-muted); text-wrap: pretty;">{{ m.text }}</div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.isVideo }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <sc-if value="{{ m.hasSrc }}" hint-placeholder-val="{{ false }}">
+                      {{ m.videoEl }}
+                    </sc-if>
+                    <sc-if value="{{ m.noSrc }}" hint-placeholder-val="{{ true }}">
+                      <div style="position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius-xl); background: var(--neutral-900); overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        <div style="position: absolute; top: 12px; left: 16px; font-size: var(--text-xs); color: var(--neutral-300); font-family: var(--font-mono);">video placeholder</div>
+                        <button onClick="{{ m.toggle }}" aria-label="Play video message" style="width: 64px; height: 64px; border-radius: var(--radius-full); border: none; background: var(--neutral-0); color: var(--neutral-950); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-lg);">
+                          <sc-if value="{{ m.playing }}" hint-placeholder-val="{{ false }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="14" y="4" width="4" height="16" rx="1"></rect><rect x="6" y="4" width="4" height="16" rx="1"></rect></svg></sc-if>
+                          <sc-if value="{{ m.paused }}" hint-placeholder-val="{{ true }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"></polygon></svg></sc-if>
+                        </button>
+                        <div style="position: absolute; left: 16px; right: 16px; bottom: 14px; display: flex; align-items: center; gap: 12px;">
+                          <div style="flex: 1; height: 4px; border-radius: var(--radius-full); background: var(--opacity-light-16); overflow: hidden;">
+                            <div style="height: 100%; width: {{ m.pct }}; background: var(--neutral-0);"></div>
+                          </div>
+                          <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--neutral-0); font-feature-settings: 'tnum' 1;">{{ m.time }}</div>
+                        </div>
+                      </div>
+                    </sc-if>
+                    <div style="font-size: var(--text-base); color: var(--text-muted); text-wrap: pretty;">{{ m.text }}</div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <sc-for list="{{ mDots }}" as="d" hint-placeholder-count="6">
+              <button onClick="{{ d.go }}" aria-label="Go to message" style="width: {{ d.w }}; height: 8px; border-radius: var(--radius-full); border: none; padding: 0; cursor: pointer; background: {{ d.bg }}; transition: width 200ms cubic-bezier(0.2,0,0,1);"></button>
+            </sc-for>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="secondary" size="small" on-click="{{ mPrev }}" aria-label="Previous message" hint-size="36px,32px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></x-import>
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="primary" size="small" on-click="{{ mNext }}" aria-label="Next message" hint-size="36px,32px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></x-import>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCollect }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 16px; flex: 1;">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: var(--text-sm); font-weight: 500;">Your name
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Input" value="{{ mName }}" on-change="{{ onMName }}" placeholder="How {{ name }} knows you" hint-size="100%,40px"></x-import>
+          </label>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: var(--text-sm); font-weight: 500;">Message type</div>
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Tabs" variant="segmented" items="{{ typeItems }}" value="{{ mType }}" on-change="{{ setMType }}" hint-size="100%,36px"></x-import>
+          </div>
+
+          <sc-if value="{{ fText }}" hint-placeholder-val="{{ true }}">
+            <textarea value="{{ mText }}" onChange="{{ onMText }}" rows="7" placeholder="Write something {{ name }} will want to keep…" style="font-family: var(--font-body); font-size: var(--text-base); line-height: 1.5; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-default); background: var(--surface-card); color: var(--text-base); resize: vertical; outline: none;"></textarea>
+          </sc-if>
+
+          <sc-if value="{{ fVoice }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 32px 16px; border: 1px dashed var(--border-default); border-radius: var(--radius-xl); background: var(--surface-muted); text-align: center;">
+              <button onClick="{{ toggleRec }}" aria-label="Record voice message" style="width: 72px; height: 72px; border-radius: var(--radius-full); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--neutral-0); background: {{ recBg }};">
+                <sc-if value="{{ isRecording }}" hint-placeholder-val="{{ false }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1"></rect></svg></sc-if>
+                <sc-if value="{{ notRecording }}" hint-placeholder-val="{{ true }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg></sc-if>
+              </button>
+              <div style="font-family: var(--font-mono); font-size: var(--text-xl); font-feature-settings: 'tnum' 1;">{{ recTime }}</div>
+              <div style="font-size: var(--text-sm); color: var(--text-muted);">{{ recHint }}</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ fVideo }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 32px 16px; border: 1px dashed var(--border-default); border-radius: var(--radius-xl); background: var(--surface-muted); text-align: center;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color: var(--icon-default);"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>
+              <div style="font-weight: 600;">{{ videoTitle }}</div>
+              <div style="font-size: var(--text-sm); color: var(--text-muted);">MP4 or MOV, up to 2 minutes</div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="secondary" size="small" on-click="{{ pickVideo }}" hint-size="120px,32px">Upload video</x-import>
+                <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="outline" size="small" on-click="{{ toggleRec }}" hint-size="120px,32px">{{ videoRecLabel }}</x-import>
+              </div>
+              <input type="file" accept="video/*" ref="{{ fileRef }}" onChange="{{ onFile }}" style="display: none;">
+            </div>
+            <input value="{{ mText }}" onChange="{{ onMText }}" placeholder="Add a caption (optional)" style="height: 40px; padding: 0 12px; font-family: var(--font-body); font-size: var(--text-sm); border-radius: var(--radius-md); border: 1px solid var(--border-default); color: var(--text-base); outline: none;">
+          </sc-if>
+
+          <sc-if value="{{ fVoiceCaption }}" hint-placeholder-val="{{ false }}">
+            <input value="{{ mText }}" onChange="{{ onMText }}" placeholder="Add a caption (optional)" style="height: 40px; padding: 0 12px; font-family: var(--font-body); font-size: var(--text-sm); border-radius: var(--radius-md); border: 1px solid var(--border-default); color: var(--text-base); outline: none;">
+          </sc-if>
+
+          <sc-if value="{{ mHasPhoto }}" hint-placeholder-val="{{ false }}">
+            <div style="position: relative;">
+              <div role="img" aria-label="Uploaded photo" style="width: 100%; height: 200px; background-image: {{ mPhotoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-lg);"></div>
+              <button onClick="{{ mRemovePhoto }}" aria-label="Remove photo" style="position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border-radius: var(--radius-full); border: none; background: var(--neutral-0); color: var(--neutral-950); display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ mNoPhoto }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ mPickPhoto }}" style="height: 56px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px dashed var(--border-default); border-radius: var(--radius-lg); background: transparent; color: inherit; font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500; cursor: pointer;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>Add a photo (optional)
+            </button>
+          </sc-if>
+          <input type="file" accept="image/*" ref="{{ mPhotoRef }}" onChange="{{ mOnPhoto }}" style="display: none;">
+          <div style="margin-top: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Button" variant="tertiary" disabled="{{ mInvalid }}" on-click="{{ addMessage }}" hint-size="140px,40px">Send message</x-import>
+            <div style="font-size: var(--text-sm); color: var(--text-success); font-weight: 500;">{{ mNote }}</div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ hasLightbox }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeLightbox }}" style="position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; padding: 48px 24px; box-sizing: border-box; cursor: zoom-out;">
+      <div role="img" aria-label="Photo" style="width: 100%; height: 100%; background-image: {{ lightboxBg }}; background-size: contain; background-position: center; background-repeat: no-repeat;"></div>
+      <button onClick="{{ closeLightbox }}" aria-label="Close photo" style="position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: var(--radius-full); border: none; background: var(--neutral-0); color: var(--neutral-950); display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;recipientName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Joanne&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;card&quot;,&quot;collect&quot;],&quot;default&quot;:&quot;card&quot;,&quot;tsType&quot;:&quot;'card' | 'collect'&quot;},&quot;cardOnly&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const QUOTES = [
+  { text: "I'm not saying it's a bug. I'm saying it's an undocumented feature with commitment issues.", context: "Sprint retro, March 2025", by: "Priya" },
+  { text: "Let's take this offline. And by offline, I mean the pub.", context: "Every Thursday at 4:55pm", by: "Tom" },
+  { text: "My calendar isn't a schedule. It's a list of suggestions.", context: "Explaining a missed 1:1", by: "Lena" },
+  { text: "If the coffee machine goes down, I'm declaring a Scope 1 emergency.", context: "Kitchen, most mornings", by: "Marcus" },
+  { text: "Every spreadsheet is a pivot table if you believe in yourself.", context: "Quarterly planning", by: "Aisha" },
+  { text: "Just one quick question.", context: "Said before a 45-minute call", by: "The data team" },
+  { text: "I've muted myself so hard I can't hear my own thoughts.", context: "All-hands, June 2026", by: "Priya" }
+];
+const MESSAGES = [
+  { id: 'm1', type: 'text', name: 'Priya Shah', role: 'Product design', text: "Four years of pairing, pixel-pushing and arguing about button radii. You made every hard problem feel like a fun one. The next team has no idea how lucky they are." },
+  { id: 'm2', type: 'voice', name: 'Tom Okafor', role: 'Engineering', dur: 34, text: "A short song. You were warned." },
+  { id: 'm3', type: 'video', name: 'Lena Fischer', role: 'Customer success', dur: 52, text: "Recorded from the office roof, where you once promised to fix the Wi-Fi." },
+  { id: 'm4', type: 'text', name: 'Marcus Reid', role: 'Data platform', text: "Thanks for always having time for the 'just one quick question'. I'll miss the stand-up jokes more than I'll admit in writing." },
+  { id: 'm5', type: 'voice', name: 'Aisha Rahman', role: 'Partnerships', dur: 65, text: "The full story of the Leeds client visit, finally on record." },
+  { id: 'm6', type: 'video', name: 'The whole data team', role: '12 people, one take', dur: 90, text: "We practised this. It didn't help." }
+];
+const fmt = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+const pad = n => String(n).padStart(2, '0');
+const barsFor = id => { let h = 0; for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0; return Array.from({ length: 36 }, (_, i) => { h = (h * 1103515245 + 12345) >>> 0; return 20 + ((h >>> 16) % 80) * (0.6 + 0.4 * Math.sin(i / 3) ** 2); }); };
+
+class Component extends DCLogic {
+  state = {
+    view: this.cardOnly() ? 'card' : (this.props.view ?? 'card'), qi: 0, mi: 0, drag: null,
+    playing: null, t: 0, copied: false, sent: false,
+    quotes: QUOTES, messages: MESSAGES,
+    qText: '', qContext: '', qBy: '', qNote: '',
+    mName: '', mType: 'text', mText: '', rec: 'idle', recSecs: 0, video: null, mNote: '', qPhoto: null, mPhoto: null, lightbox: null
+  };
+  cardOnly() {
+    if (this.props.cardOnly) return true;
+    try { const q = new URLSearchParams(window.location.search); return q.get('view') === 'card' || q.has('card'); } catch (e) { return false; }
+  }
+  fileRef = React.createRef();
+  qPhotoRef = React.createRef();
+  mPhotoRef = React.createRef();
+  photoVals(p) {
+    const key = p + 'Photo', ref = this[p + 'PhotoRef'], cur = this.state[key];
+    return {
+      [p + 'HasPhoto']: !!cur, [p + 'NoPhoto']: !cur, [p + 'PhotoBg']: cur ? 'url("' + cur.url + '")' : 'none', [p + 'PhotoRef']: ref,
+      [p + 'PickPhoto']: () => ref.current && ref.current.click(),
+      [p + 'RemovePhoto']: () => { if (ref.current) ref.current.value = ''; this.setState({ [key]: null }); },
+      [p + 'OnPhoto']: e => { const f = e.target.files && e.target.files[0]; if (f) this.setState({ [key]: { name: f.name, url: URL.createObjectURL(f) } }); }
+    };
+  }
+  palette = [
+    { bg: '#EFB32F', dark: true }, { bg: '#63474D', dark: false }, { bg: '#AA767C', dark: false },
+    { bg: '#D6A184', dark: true }, { bg: '#FFA686', dark: true }, { bg: '#FEC196', dark: true }
+  ];
+  qSeq = [this.palette[0]];
+  colorFor(i) {
+    while (this.qSeq.length <= i) {
+      const prev = this.qSeq[this.qSeq.length - 1];
+      const opts = this.palette.filter(p => p !== prev);
+      this.qSeq.push(opts[Math.floor(Math.random() * opts.length)]);
+    }
+    return this.qSeq[i];
+  }
+
+  componentDidUpdate(prev) { if (prev.view !== this.props.view && this.props.view && !this.cardOnly()) this.setState({ view: this.props.view }); }
+  componentDidMount() { this.onKey = e => { if (e.key === 'Escape' && this.state.lightbox) this.setState({ lightbox: null }); }; window.addEventListener('keydown', this.onKey); }
+  componentWillUnmount() { clearInterval(this.playTimer); clearInterval(this.recTimer); window.removeEventListener('keydown', this.onKey); }
+  openPhoto(url) { if (Math.abs(this.lastDx || 0) > 6) return; this.setState({ lightbox: url }); }
+
+  swipe(panel, len) {
+    const key = panel === 'q' ? 'qi' : 'mi';
+    const go = i => { this.stopPlay(); this.setState({ [key]: (i + len) % len }); };
+    return {
+      down: e => (this.lastDx = 0, this.setState({ drag: { panel, x: e.clientX, dx: 0 } })),
+      move: e => { const d = this.state.drag; if (d && d.panel === panel) this.setState({ drag: { ...d, dx: e.clientX - d.x } }); },
+      up: () => { const d = this.state.drag; if (!d || d.panel !== panel) return; this.lastDx = d.dx; this.setState({ drag: null }); if (d.dx < -60) go(this.state[key] + 1); else if (d.dx > 60) go(this.state[key] - 1); },
+      prev: () => go(this.state[key] - 1),
+      next: () => go(this.state[key] + 1),
+      go
+    };
+  }
+
+  stopPlay() { clearInterval(this.playTimer); if (this.state.playing) this.setState({ playing: null, t: 0 }); }
+  togglePlay(m) {
+    if (this.state.playing === m.id) { clearInterval(this.playTimer); this.setState({ playing: null }); return; }
+    clearInterval(this.playTimer);
+    this.setState(s => ({ playing: m.id, t: s.playing === m.id ? s.t : 0 }));
+    this.playTimer = setInterval(() => {
+      this.setState(s => {
+        const t = s.t + 0.1;
+        if (t >= m.dur) { clearInterval(this.playTimer); return { playing: null, t: 0 }; }
+        return { t };
+      });
+    }, 100);
+  }
+
+  toggleRec = () => {
+    if (this.state.rec === 'rec') { clearInterval(this.recTimer); this.setState({ rec: 'done' }); return; }
+    this.setState({ rec: 'rec', recSecs: 0, video: null });
+    this.recTimer = setInterval(() => this.setState(s => ({ recSecs: s.recSecs + 1 })), 1000);
+  };
+
+  resetForm(extra) { clearInterval(this.recTimer); this.setState({ mText: '', rec: 'idle', recSecs: 0, video: null, ...extra }); }
+
+  addMessage = () => {
+    const s = this.state;
+    const hasMedia = s.mType === 'voice' ? s.rec === 'done' : s.mType === 'video' ? (s.video || s.rec === 'done') : true;
+    const m = { id: 'u' + Date.now(), type: hasMedia ? s.mType : 'text', name: s.mName.trim() || 'Anonymous', role: 'Added just now', text: s.mText.trim() };
+    if (m.type !== 'text') m.dur = s.recSecs || 30;
+    if (m.type === 'video' && s.video) m.src = s.video.url;
+    if (s.mPhoto) m.photo = s.mPhoto.url;
+    if (m.type !== 'text' && !m.text) m.text = m.type === 'voice' ? 'Voice message' : 'Video message';
+    this.resetForm({ messages: [...s.messages, m], mNote: s.mName.trim() ? `Thanks, ${m.name.split(' ')[0]} — your message is in.` : 'Thanks — your message is in.', mName: '', mPhoto: null });
+  };
+
+  addQuote = () => {
+    const s = this.state;
+    const q = { text: s.qText.trim().replace(/^[“"]|[”"]$/g, ''), context: '', by: '', photo: s.qPhoto ? s.qPhoto.url : null };
+    this.setState({ quotes: [...s.quotes, q], qPhoto: null, qText: '', qContext: '', qNote: `Added. That's ${s.quotes.length + 1} quotes so far.` });
+  };
+
+  dots(len, cur, go, on, off) {
+    return Array.from({ length: len }, (_, i) => ({ w: i === cur ? '24px' : '8px', bg: i === cur ? on : off, go: () => go(i) }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const name = this.props.recipientName ?? 'Joanne';
+    const isCard = this.cardOnly() || s.view === 'card';
+    const qs = this.swipe('q', s.quotes.length), ms = this.swipe('m', s.messages.length);
+    const qi = Math.min(s.qi, s.quotes.length - 1), mi = Math.min(s.mi, s.messages.length - 1);
+    const qCol = this.colorFor(isCard ? qi : 0);
+    const dq = s.drag && s.drag.panel === 'q', dm = s.drag && s.drag.panel === 'm';
+    const tr = d => d ? 'none' : 'transform 320ms cubic-bezier(0.2,0,0,1)';
+    const tf = (i, d) => `translateX(calc(${-i * 100}% + ${d ? s.drag.dx : 0}px))`;
+    const typeLabel = { text: 'Note', voice: 'Voice note', video: 'Video' };
+
+    const messages = s.messages.map(m => {
+      const active = s.playing === m.id;
+      const t = active || (s.playing === null && s.t > 0 && false) ? s.t : 0;
+      const frac = m.dur ? t / m.dur : 0;
+      return {
+        ...m, typeLabel: m.photo && !m.text ? 'Photo' : typeLabel[m.type], hasPhoto: !!m.photo, photoBg: m.photo ? 'url("' + m.photo + '")' : 'none', openPhoto: () => this.openPhoto(m.photo),
+        isText: m.type === 'text', isVoice: m.type === 'voice', isVideo: m.type === 'video',
+        hasSrc: !!m.src, videoEl: m.src ? React.createElement('video', { key: m.src, src: m.src, controls: true, playsInline: true, style: { width: '100%', aspectRatio: '16 / 9', borderRadius: 'var(--radius-xl)', background: 'var(--neutral-950)', display: 'block' } }) : null, noSrc: !m.src,
+        playing: active, paused: !active,
+        toggle: () => this.togglePlay(m),
+        time: active ? `${fmt(t)} / ${fmt(m.dur)}` : fmt(m.dur || 0),
+        pct: (frac * 100).toFixed(1) + '%',
+        bars: m.type === 'voice' ? barsFor(m.id).map((h, i, a) => ({ h: h.toFixed(0) + '%', bg: i / a.length < frac ? 'var(--tangerine)' : 'var(--neutral-400)' })) : []
+      };
+    });
+
+    const needsMedia = s.mType !== 'text';
+    const hasMedia = s.mType === 'voice' ? s.rec === 'done' : (s.video || s.rec === 'done');
+
+    return {
+      name, isCard, isCollect: !isCard, view: s.view,
+      viewItems: [{ value: 'card', label: 'Card' }, { value: 'collect', label: 'Collect messages' }],
+      setView: v => { this.stopPlay(); this.setState({ view: v }); },
+      quoteCount: s.quotes.length, msgCount: s.messages.length,
+      msgTitle: isCard ? `Messages for ${name}` : 'Leave a message',
+
+      quotes: s.quotes.map(q => ({ ...q, hasPhoto: !!q.photo, photoBg: q.photo ? 'url("' + q.photo + '")' : 'none', openPhoto: () => this.openPhoto(q.photo) })), ...this.photoVals('q'), hasLightbox: !!s.lightbox, lightboxBg: s.lightbox ? 'url("' + s.lightbox + '")' : 'none', closeLightbox: () => this.setState({ lightbox: null }), ...this.photoVals('m'), qCounter: `${pad(qi + 1)} / ${pad(s.quotes.length)}`,
+      qTransform: tf(qi, dq), qTransition: tr(dq),
+      qDown: qs.down, qMove: qs.move, qUp: qs.up, qPrev: qs.prev, qNext: qs.next,
+      qDots: this.dots(s.quotes.length, qi, qs.go, qCol.dark ? '#2B1F22' : '#FFFFFF', qCol.dark ? 'rgba(43,31,34,0.25)' : 'rgba(255,255,255,0.35)'),
+      qBg: qCol.bg, qFg: qCol.dark ? '#2B1F22' : '#FFFFFF',
+
+      messages, mCounter: `${pad(mi + 1)} / ${pad(s.messages.length)}`,
+      mTransform: tf(mi, dm), mTransition: tr(dm),
+      mDown: ms.down, mMove: ms.move, mUp: ms.up, mPrev: ms.prev, mNext: ms.next,
+      mDots: this.dots(s.messages.length, mi, ms.go, 'var(--neutral-950)', 'var(--neutral-200)'),
+
+      shareLink: `423.io/farewell/${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-k7x2`,
+      copyLabel: s.copied ? 'Copied' : 'Copy link',
+      copyLink: () => { try { navigator.clipboard.writeText('https://' + `423.io/farewell/${name.toLowerCase()}-k7x2`); } catch (e) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1800); },
+      sendLabel: s.sent ? 'Link copied' : `Copy ${name}'s link`,
+      sendCard: () => { const u = window.location.origin + window.location.pathname + '?view=card'; try { navigator.clipboard.writeText(u); } catch (e) {} this.setState({ sent: true }); setTimeout(() => this.setState({ sent: false }), 1800); },
+      showToggle: !this.cardOnly(),
+
+      qText: s.qText, qContext: s.qContext, qBy: s.qBy, qNote: s.qNote,
+      onQText: e => this.setState({ qText: e.target.value, qNote: '' }),
+      onQContext: e => this.setState({ qContext: e.target.value }),
+      onQBy: e => this.setState({ qBy: e.target.value }),
+      qInvalid: !s.qText.trim(),
+      addQuote: this.addQuote,
+
+      mName: s.mName, mText: s.mText, mNote: s.mNote, mType: s.mType,
+      onMName: e => this.setState({ mName: e.target.value, mNote: '' }),
+      onMText: e => this.setState({ mText: e.target.value }),
+      typeItems: [{ value: 'text', label: 'Written' }, { value: 'voice', label: 'Voice' }, { value: 'video', label: 'Video' }],
+      setMType: v => this.resetForm({ mType: v }),
+      fText: s.mType === 'text', fVoice: s.mType === 'voice', fVideo: s.mType === 'video', fVoiceCaption: s.mType === 'voice' && s.rec === 'done',
+      isRecording: s.rec === 'rec', notRecording: s.rec !== 'rec',
+      recBg: s.rec === 'rec' ? 'var(--destructive-600)' : 'var(--accent)',
+      recTime: fmt(s.recSecs),
+      recHint: s.rec === 'rec' ? 'Recording… tap to stop' : s.rec === 'done' ? 'Got it. Tap to re-record.' : 'Tap to start recording',
+      toggleRec: this.toggleRec,
+      videoTitle: s.video ? s.video.name : s.rec === 'rec' ? `Recording ${fmt(s.recSecs)}…` : s.rec === 'done' ? `Recorded ${fmt(s.recSecs)}` : 'Record or upload a video',
+      videoRecLabel: s.rec === 'rec' ? 'Stop recording' : 'Record video',
+      fileRef: this.fileRef,
+      pickVideo: () => this.fileRef.current && this.fileRef.current.click(),
+      onFile: e => { const f = e.target.files && e.target.files[0]; if (f) { clearInterval(this.recTimer); this.setState({ video: { name: f.name, url: URL.createObjectURL(f) }, rec: 'idle', recSecs: 0 }); } },
+      mInvalid: !s.mPhoto && (!s.mName.trim() || (needsMedia ? !hasMedia : !s.mText.trim())),
+      addMessage: this.addMessage
+    };
+  }
+}
+</script>
+</body>
+</html>

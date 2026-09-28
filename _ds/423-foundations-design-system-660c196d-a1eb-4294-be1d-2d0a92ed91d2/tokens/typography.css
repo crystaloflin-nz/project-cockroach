@@ -1,0 +1,60 @@
+/* ============================================================
+   423 Foundations — Typography Tokens
+   Four type roles, each with a dedicated family:
+     · Brand   — Trench Rounded  (oversized hero numerals/marketing)
+     · Heading — Cabinet Grotesk (section + card titles)
+     · Body    — Figtree         (UI copy, labels, paragraphs)
+     · System  — Inter           (dense data, tables, numerals)
+   Font files are loaded in fonts.css.
+   ============================================================ */
+
+:root {
+  /* ---- Families --------------------------------------------- */
+  /* Trench Rounded is not yet hosted — until the licensed file is
+     added (see fonts.css) this falls back to system-ui. NO substitute. */
+  --font-brand:   "Trench Rounded", system-ui, sans-serif;
+  --font-heading: "Cabinet Grotesk", "Figtree", system-ui, sans-serif;
+  --font-body:    "Figtree", system-ui, -apple-system, sans-serif;
+  --font-system:  "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono:    "Geist Mono", ui-monospace, "SF Mono", monospace;
+
+  /* ---- Font sizes (px scale, Tailwind-aligned) -------------- */
+  --text-xs:   12px;
+  --text-sm:   14px;
+  --text-base: 16px;
+  --text-lg:   18px;
+  --text-xl:   20px;
+  --text-2xl:  24px;
+  --text-3xl:  32px;
+  --text-4xl:  36px;
+  --text-5xl:  48px;
+  --text-6xl:  56px;
+  --text-7xl:  64px;
+  --text-8xl:  72px;
+  --text-9xl:  96px;
+
+  /* ---- Line heights ----------------------------------------- */
+  --leading-none:    1;
+  --leading-tight:   1.15;
+  --leading-snug:    1.3;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+
+  /* ---- Weights ---------------------------------------------- */
+  --weight-light:     300;
+  --weight-normal:    400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+  --weight-extrabold: 800;
+  --weight-black:     900;
+
+  /* ---- Letter spacing --------------------------------------- */
+  --tracking-tightest: -0.025em;  /* huge display                 */
+  --tracking-tighter:  -0.018em;  /* headings                     */
+  --tracking-tight:    -0.01em;
+  --tracking-normal:   0;
+  --tracking-wide:     0.025em;
+  --tracking-wider:    0.05em;    /* eyebrow / overline labels    */
+  --tracking-widest:   0.1em;
+}

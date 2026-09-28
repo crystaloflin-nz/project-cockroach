@@ -1,0 +1,130 @@
+/* ============================================================
+   423 Foundations — Color Primitives
+   Raw color ramps (sys-color tier, 423 default brand).
+   Brand-specific overrides for the --primary ramp live in
+   brand-modes.css and are scoped to [data-brand].
+   ============================================================ */
+
+:root {
+  /* ---- Primary · 423 brand blue (Electric) ------------------ */
+  --primary-50:  #f5f7ff;
+  --primary-100: #e9edff;
+  --primary-200: #e3e8ff;
+  --primary-300: #ccd7ff;
+  --primary-400: #4d7eff;
+  --primary-500: #1f51ff;  /* core brand */
+  --primary-600: #153ecd;
+  --primary-700: #06289f;
+  --primary-800: #122050;
+  --primary-900: #081440;
+  --primary-950: #010022;
+
+  /* ---- Neutral · cool graphite (UI chrome, text) ------------ */
+  --neutral-0:    #ffffff;
+  --neutral-50:   #fcfcfc;
+  --neutral-100:  #f5f5f5;
+  --neutral-200:  #eeeeee;
+  --neutral-300:  #e9e9e9;
+  --neutral-400:  #babdc4;
+  --neutral-500:  #999ba7;
+  --neutral-600:  #696b7b;
+  --neutral-650:  #4c4c5e;
+  --neutral-700:  #2a2a35;
+  --neutral-800:  #22222c;
+  --neutral-900:  #171721;
+  --neutral-950:  #10101a;
+  --neutral-1000: #000000;
+
+  /* ---- Secondary · warm stone (calm surfaces, chips) -------- */
+  --secondary-50:  #fafaf9;
+  --secondary-100: #f5f5f4;
+  --secondary-200: #e7e5e4;
+  --secondary-300: #d6d3d1;
+  --secondary-400: #a8a29e;
+  --secondary-500: #78716c;
+  --secondary-600: #57534e;
+  --secondary-700: #44403c;
+  --secondary-800: #292524;
+  --secondary-900: #1c1917;
+  --secondary-950: #0c0a09;
+
+  /* ---- Tertiary · amber (highlights, energy/data accents) --- */
+  --tertiary-50:  #fff8ed;
+  --tertiary-100: #ffe9c7;
+  --tertiary-200: #ffd89b;
+  --tertiary-300: #ffbc54;
+  --tertiary-400: #ffab2a;
+  --tertiary-500: #ffa012;
+  --tertiary-600: #fb9600;
+  --tertiary-700: #e77400;
+  --tertiary-800: #d56b00;
+  --tertiary-900: #bb5e00;
+  --tertiary-950: #a55200;
+
+  /* ---- Success · green -------------------------------------- */
+  --success-50:  #f6fff2;
+  --success-100: #e8f6e0;
+  --success-200: #ddf1d5;
+  --success-300: #b6e1a8;
+  --success-400: #2e9d28;
+  --success-500: #188712;
+  --success-600: #006709;
+  --success-700: #005608;
+  --success-800: #004208;
+  --success-900: #002c06;
+  --success-950: #001203;
+
+  /* ---- Warning · orange ------------------------------------- */
+  --warning-50:  #fff7ed;
+  --warning-100: #ffeed4;
+  --warning-200: #ffd8a8;
+  --warning-300: #ffbc71;
+  --warning-400: #ff9233;
+  --warning-500: #fe7611;
+  --warning-600: #ef5b07;
+  --warning-700: #c64208;
+  --warning-800: #9d350f;
+  --warning-900: #7e2e10;
+  --warning-950: #441406;
+
+  /* ---- Destructive · red ------------------------------------ */
+  --destructive-50:  #fff0f2;
+  --destructive-100: #fbdbdb;
+  --destructive-200: #f0c4c4;
+  --destructive-300: #f68383;
+  --destructive-400: #d45453;
+  --destructive-500: #dc2626;
+  --destructive-600: #bd0000;
+  --destructive-700: #9b0000;
+  --destructive-800: #570000;
+  --destructive-900: #3b0000;
+  --destructive-950: #200000;
+
+  /* ---- Info · cyan-blue ------------------------------------- */
+  --info-50:  #ebf6ff;
+  --info-100: #acebff;
+  --info-200: #5bd2ff;
+  --info-300: #17b2e9;
+  --info-400: #0097cd;
+  --info-500: #007bb0;
+  --info-600: #005f8c;
+  --info-700: #004568;
+  --info-800: #002c47;
+  --info-900: #001528;
+  --info-950: #00030d;
+
+  /* ---- Opacity primitives (scrims, hover overlays) ---------- */
+  --opacity-dark-4:   rgba(0, 0, 0, 0.04);
+  --opacity-dark-8:   rgba(0, 0, 0, 0.08);
+  --opacity-dark-12:  rgba(0, 0, 0, 0.12);
+  --opacity-dark-16:  rgba(0, 0, 0, 0.16);
+  --opacity-dark-24:  rgba(0, 0, 0, 0.24);
+  --opacity-dark-50:  rgba(0, 0, 0, 0.50);
+  --opacity-dark-70:  rgba(0, 0, 0, 0.70);
+  --opacity-light-8:  rgba(255, 255, 255, 0.08);
+  --opacity-light-12: rgba(255, 255, 255, 0.12);
+  --opacity-light-16: rgba(255, 255, 255, 0.16);
+  --opacity-light-24: rgba(255, 255, 255, 0.24);
+  --opacity-light-50: rgba(255, 255, 255, 0.50);
+  --opacity-light-70: rgba(255, 255, 255, 0.70);
+}

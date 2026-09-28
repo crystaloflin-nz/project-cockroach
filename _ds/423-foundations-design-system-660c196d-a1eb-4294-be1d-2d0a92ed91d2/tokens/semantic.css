@@ -1,0 +1,67 @@
+/* ============================================================
+   423 Foundations — Semantic Color Tokens
+   Role-based aliases. Components reference THESE, never the raw
+   ramps, so re-branding (data-brand) flows through automatically.
+   ============================================================ */
+
+:root {
+  /* ---- Text ------------------------------------------------- */
+  --text-base:        var(--neutral-950);   /* primary copy            */
+  --text-muted:       var(--neutral-600);   /* secondary copy, labels  */
+  --text-subtle:      var(--neutral-500);   /* placeholder, captions   */
+  --text-disabled:    var(--neutral-400);
+  --text-on-accent:   var(--neutral-0);     /* text on brand/dark fills*/
+  --text-link:        var(--primary-600);
+  --text-brand:       var(--primary-700);
+  --text-success:     var(--success-600);
+  --text-warning:     var(--warning-700);
+  --text-danger:      var(--destructive-600);
+  --text-info:        var(--info-600);
+
+  /* ---- Surface (backgrounds) -------------------------------- */
+  --surface-page:     var(--neutral-100);   /* app canvas              */
+  --surface-card:     var(--neutral-0);     /* raised cards / panels   */
+  --surface-sunken:   var(--neutral-100);   /* wells, table zebra      */
+  --surface-muted:    var(--neutral-50);
+  --surface-hover:    var(--opacity-dark-4);
+  --surface-inverse:  var(--neutral-900);   /* dark sidebar / tooltips */
+  --surface-brand:    var(--primary-500);
+  --surface-brand-soft: var(--primary-100);
+  --surface-success-soft: var(--success-100);
+  --surface-warning-soft: var(--warning-100);
+  --surface-danger-soft:  var(--destructive-100);
+  --surface-info-soft:    var(--info-50);
+  --scrim:            var(--opacity-dark-50);
+
+  /* ---- Border ----------------------------------------------- */
+  --border-subtle:    var(--neutral-200);
+  --border-default:   var(--neutral-300);
+  --border-strong:    var(--neutral-400);
+  --border-brand:     var(--primary-500);
+  --border-danger:    var(--destructive-500);
+  --border-inverse:   var(--opacity-light-16);
+
+  /* ---- Icon ------------------------------------------------- */
+  --icon-default:     var(--neutral-650);
+  --icon-muted:       var(--neutral-500);
+  --icon-brand:       var(--primary-500);
+  --icon-on-accent:   var(--neutral-0);
+
+  /* ---- Focus ring ------------------------------------------- */
+  --ring:             var(--primary-500);
+  --ring-offset:      var(--neutral-0);
+
+  /* ---- Brand accent (used by tertiary button, links, charts) */
+  --accent:           var(--primary-500);
+  --accent-hover:     var(--primary-600);
+  --accent-pressed:   var(--primary-700);
+  --accent-foreground: var(--neutral-0);
+
+  /* ---- Data-viz sequence (emissions scopes etc.) ------------ */
+  --chart-1: var(--primary-500);
+  --chart-2: var(--tertiary-500);
+  --chart-3: var(--info-500);
+  --chart-4: var(--success-500);
+  --chart-5: var(--secondary-500);
+  --chart-6: var(--primary-300);
+}

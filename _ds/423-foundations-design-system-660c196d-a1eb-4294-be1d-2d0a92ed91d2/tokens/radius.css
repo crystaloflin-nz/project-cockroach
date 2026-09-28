@@ -1,0 +1,44 @@
+/* ============================================================
+   423 Foundations — Radius & Elevation
+   Corner radii are intentionally restrained — the 423 brand
+   reads sharp & precise. Buttons sit at sm/md, cards at xl/2xl.
+   Shadows are soft, low-spread and neutral (no coloured glows).
+   ============================================================ */
+
+:root {
+  /* ---- Radius ----------------------------------------------- */
+  --radius-none: 0;
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-3xl:  24px;
+  --radius-4xl:  32px;
+  --radius-full: 9999px;
+
+  /* Component defaults */
+  --radius-button: var(--radius-sm);
+  --radius-input:  var(--radius-md);
+  --radius-card:   var(--radius-xl);
+  --radius-chip:   var(--radius-full);
+
+  /* ---- Elevation (shadows) ---------------------------------- */
+  --shadow-2xs: 0 1px 1px rgba(16, 16, 26, 0.04);
+  --shadow-xs:  0 1px 2px rgba(16, 16, 26, 0.06);
+  --shadow-sm:  0 1px 3px rgba(16, 16, 26, 0.08), 0 1px 2px rgba(16, 16, 26, 0.04);
+  --shadow-md:  0 4px 8px -2px rgba(16, 16, 26, 0.08), 0 2px 4px -2px rgba(16, 16, 26, 0.05);
+  --shadow-lg:  0 12px 20px -6px rgba(16, 16, 26, 0.10), 0 4px 8px -4px rgba(16, 16, 26, 0.06);
+  --shadow-xl:  0 24px 40px -10px rgba(16, 16, 26, 0.14), 0 8px 16px -8px rgba(16, 16, 26, 0.08);
+
+  /* Focus ring helper (2px brand ring + white offset) */
+  --shadow-focus: 0 0 0 2px var(--ring-offset), 0 0 0 4px var(--ring);
+
+  /* ---- Motion ----------------------------------------------- */
+  --ease-standard:   cubic-bezier(0.2, 0, 0, 1); /* @kind other */
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1); /* @kind other */
+  --duration-fast:   120ms; /* @kind other */
+  --duration-base:   200ms; /* @kind other */
+  --duration-slow:   320ms; /* @kind other */
+}

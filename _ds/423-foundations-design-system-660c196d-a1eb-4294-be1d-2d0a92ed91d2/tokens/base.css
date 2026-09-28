@@ -1,0 +1,81 @@
+/* ============================================================
+   423 Foundations — Base layer
+   Lightweight, opt-in element defaults. Kept minimal so it can
+   sit under product CSS without fighting it. Components style
+   themselves; this just sets sane document-level defaults and
+   a few reusable type-style helper classes.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-base);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Tabular figures for any data context */
+.ds-tnum { font-feature-settings: "tnum" 1; font-variant-numeric: tabular-nums; }
+
+/* ---- Type-style helpers ------------------------------------ */
+.ds-display {
+  font-family: var(--font-brand);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-8xl);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tightest);
+}
+.ds-h1 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-4xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tighter);
+}
+.ds-h2 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tighter);
+}
+.ds-h3 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+}
+.ds-body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+.ds-body-sm {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+.ds-label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+}
+.ds-overline {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+}
+.ds-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1;
+}

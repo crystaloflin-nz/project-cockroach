@@ -1,0 +1,41 @@
+/* ============================================================
+   423 Foundations — Web Fonts
+   Loaded from hosted CDNs (Google Fonts + Fontshare).
+
+   FONT NOTES
+   ----------
+   · Figtree, Inter, Geist Mono → Google Fonts (exact faces).
+   · Cabinet Grotesk → Fontshare (exact face).
+   · "Trench Rounded" (the 423 brand display face used for the
+     oversized hero numerals) is a COMMERCIAL font with no free
+     web host. NO font file is bundled and NO substitute is used.
+     Until the licensed Trench Rounded web files are added to the
+     project, --font-brand falls back to the generic stack and
+     display numerals render in system-ui. Upload the font and
+     add an @font-face block below — see readme.md.
+   · "RN House Sans" (NatWest brand font) is likewise proprietary
+     and is not bundled; NatWest surfaces fall back to Figtree.
+   ============================================================ */
+
+/* Figtree — body & label */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap");
+
+/* Inter — system / dense data / tables */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+/* Geist Mono — monospace numerals & code */
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&display=swap");
+
+/* Cabinet Grotesk — heading face (Fontshare) */
+@import url("https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800,900&display=swap");
+
+/* Trench Rounded — 423 brand display face. NOT YET AVAILABLE.
+   Upload the licensed web files and uncomment / complete:
+
+   @font-face {
+     font-family: "Trench Rounded";
+     src: url("../assets/fonts/TrenchRounded.woff2") format("woff2");
+     font-weight: 400 700;
+     font-display: swap;
+   }
+*/

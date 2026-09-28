@@ -1,0 +1,21 @@
+/* ============================================================
+   423 Foundations Design System — global entry point.
+   Consumers link THIS one file. It is an @import manifest only;
+   all real declarations live in the imported token files.
+   ============================================================ */
+
+/* Webfonts (must load first) */
+@import "./tokens/fonts.css";
+
+/* Color: primitives → brand overrides → semantic aliases */
+@import "./tokens/colors.css";
+@import "./tokens/brand-modes.css";
+@import "./tokens/semantic.css";
+
+/* Foundations */
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/radius.css";
+
+/* Base element defaults + helpers */
+@import "./tokens/base.css";
