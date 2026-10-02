@@ -87,7 +87,7 @@
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 24px; align-items: stretch;">
 
     <!-- LEFT: quotes -->
-    <div style="background: {{ qBg }}; color: {{ qFg }}; transition: background-color 320ms cubic-bezier(0.2,0,0,1), color 320ms cubic-bezier(0.2,0,0,1); border-radius: var(--radius-2xl); padding: 32px; display: flex; flex-direction: column; gap: 24px; min-height: 560px; box-sizing: border-box; overflow: hidden;">
+    <div style="background: {{ qBg }}; color: {{ qFg }}; transition: background-color 320ms cubic-bezier(0.2,0,0,1), color 320ms cubic-bezier(0.2,0,0,1); border-radius: var(--radius-2xl); padding: 32px; display: flex; flex-direction: column; gap: 24px; height: {{ panelH }}; min-height: {{ panelMin }}; box-sizing: border-box; overflow: hidden;">
       <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
         <div style="font-family: var(--font-heading); font-weight: 500; font-size: var(--text-2xl); letter-spacing: -0.018em;">Things {{ name }} said</div>
         <sc-if value="{{ qHasItems }}" hint-placeholder-val="{{ true }}">
@@ -103,13 +103,13 @@
       </sc-if>
 
       <sc-if value="{{ qHasItems }}" hint-placeholder-val="{{ true }}">
-        <div onPointerDown="{{ qDown }}" onPointerMove="{{ qMove }}" onPointerUp="{{ qUp }}" onPointerLeave="{{ qUp }}" style="flex: 1; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; display: flex;">
+        <div ref="{{ qViewRef }}" onPointerDown="{{ qDown }}" onPointerMove="{{ qMove }}" onPointerUp="{{ qUp }}" onPointerLeave="{{ qUp }}" style="flex: 1; min-height: 0; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; display: flex;">
           <div style="display: flex; width: 100%; transform: {{ qTransform }}; transition: {{ qTransition }};">
             <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="1">
-              <div style="flex: 0 0 100%; box-sizing: border-box; padding-right: 8px; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
-                <sc-if value="{{ q.hasPhoto }}" hint-placeholder-val="{{ false }}"><div onClick="{{ q.openPhoto }}" role="button" aria-label="View photo full size" style="cursor: zoom-in; width: 100%; height: 220px; flex: none; background-image: {{ q.photoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-xl);"></div></sc-if>
-                <div style="font-family: var(--font-heading); font-weight: 500; font-size: 96px; line-height: 0.6; height: 40px;">“</div>
-                <div style="font-family: var(--font-heading); font-weight: 500; font-size: clamp(28px, 3vw, 40px); line-height: 1.15; letter-spacing: -0.02em; text-wrap: pretty;">{{ q.text }}</div>
+              <div data-slide="1" style="flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding-right: 8px; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
+                <sc-if value="{{ q.hasPhoto }}" hint-placeholder-val="{{ false }}"><div onClick="{{ q.openPhoto }}" role="button" aria-label="View photo full size" style="cursor: zoom-in; width: 100%; height: clamp(110px, 22vh, 220px); flex: none; background-image: {{ q.photoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-xl);"></div></sc-if>
+                <div style="font-family: var(--font-heading); font-weight: 500; font-size: 96px; line-height: 1; height: 46px; flex: none; overflow: hidden;">“</div>
+                <div data-fit="1" style="font-family: var(--font-heading); font-weight: 500; font-size: var(--fit-size, clamp(28px, 3vw, 40px)); line-height: 1.15; letter-spacing: -0.02em; text-wrap: pretty;">{{ q.text }}</div>
               </div>
             </sc-for>
           </div>
@@ -154,7 +154,7 @@
     </div>
 
     <!-- RIGHT: messages -->
-    <div style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-2xl); padding: 32px; display: flex; flex-direction: column; gap: 24px; min-height: 560px; box-sizing: border-box; overflow: hidden;">
+    <div style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-2xl); padding: 32px; display: flex; flex-direction: column; gap: 24px; height: {{ panelH }}; min-height: {{ panelMin }}; box-sizing: border-box; overflow: hidden;">
       <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
         <div style="font-family: var(--font-heading); font-weight: 500; font-size: var(--text-2xl); letter-spacing: -0.018em;">{{ msgTitle }}</div>
         <sc-if value="{{ mHasItems }}" hint-placeholder-val="{{ true }}">
@@ -170,10 +170,10 @@
       </sc-if>
 
       <sc-if value="{{ mHasItems }}" hint-placeholder-val="{{ true }}">
-        <div onPointerDown="{{ mDown }}" onPointerMove="{{ mMove }}" onPointerUp="{{ mUp }}" onPointerLeave="{{ mUp }}" style="flex: 1; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; display: flex;">
+        <div ref="{{ mViewRef }}" onPointerDown="{{ mDown }}" onPointerMove="{{ mMove }}" onPointerUp="{{ mUp }}" onPointerLeave="{{ mUp }}" style="flex: 1; min-height: 0; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; display: flex;">
           <div style="display: flex; width: 100%; transform: {{ mTransform }}; transition: {{ mTransition }};">
             <sc-for list="{{ messages }}" as="m" hint-placeholder-count="1">
-              <div style="flex: 0 0 100%; box-sizing: border-box; padding-right: 8px; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
+              <div data-slide="1" style="flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding-right: 8px; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                   <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Avatar" name="{{ m.name }}" size="md" hint-size="40px,40px"></x-import>
                   <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;">
@@ -181,10 +181,10 @@
                   </div>
                   <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Badge" hint-size="80px,24px">{{ m.typeLabel }}</x-import>
                 </div>
-                <sc-if value="{{ m.hasPhoto }}" hint-placeholder-val="{{ false }}"><div onClick="{{ m.openPhoto }}" role="button" aria-label="View photo full size" style="cursor: zoom-in; width: 100%; height: 220px; flex: none; background-image: {{ m.photoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-xl);"></div></sc-if>
+                <sc-if value="{{ m.hasPhoto }}" hint-placeholder-val="{{ false }}"><div onClick="{{ m.openPhoto }}" role="button" aria-label="View photo full size" style="cursor: zoom-in; width: 100%; height: clamp(110px, 22vh, 220px); flex: none; background-image: {{ m.photoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-xl);"></div></sc-if>
 
                 <sc-if value="{{ m.isText }}" hint-placeholder-val="{{ true }}">
-                  <div style="font-size: clamp(20px, 2vw, 24px); line-height: 1.45; color: var(--text-ink); text-wrap: pretty;">{{ m.text }}</div>
+                  <div data-fit="1" style="font-size: var(--fit-size, clamp(20px, 2vw, 24px)); line-height: 1.45; color: var(--text-ink); text-wrap: pretty;">{{ m.text }}</div>
                 </sc-if>
 
                 <sc-if value="{{ m.isVoice }}" hint-placeholder-val="{{ false }}">
@@ -201,7 +201,7 @@
                       </div>
                       <div style="flex: none; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted); font-feature-settings: 'tnum' 1;">{{ m.time }}</div>
                     </div>
-                    <div style="font-size: var(--text-base); color: var(--text-muted); text-wrap: pretty;">{{ m.text }}</div>
+                    <div data-fit="1" style="font-size: var(--fit-size, var(--text-base)); color: var(--text-muted); text-wrap: pretty;">{{ m.text }}</div>
                   </div>
                 </sc-if>
 
@@ -225,7 +225,7 @@
                         </div>
                       </div>
                     </sc-if>
-                    <div style="font-size: var(--text-base); color: var(--text-muted); text-wrap: pretty;">{{ m.text }}</div>
+                    <div data-fit="1" style="font-size: var(--fit-size, var(--text-base)); color: var(--text-muted); text-wrap: pretty;">{{ m.text }}</div>
                   </div>
                 </sc-if>
               </div>
@@ -357,6 +357,9 @@ const CARD = (qs().get('card') || 'joanne').slice(0, 64);
 const API = '/api/entries?card=' + encodeURIComponent(CARD);
 const MAX_VIDEO_SECS = 120;
 const MAX_VOICE_SECS = 300;
+// Card panels track the viewport instead of growing with their content.
+const PANEL_H = 'clamp(360px, calc(100svh - 290px), 760px)';
+const MIN_FIT = 0.5;   // don't shrink fitted text below half its CSS size
 
 const rowToQuote = r => ({ id: r.id, text: r.text, photo: r.photo_url || null });
 const rowToMessage = r => ({
@@ -435,6 +438,49 @@ class Component extends DCLogic {
   fileRef = React.createRef();
   qPhotoRef = React.createRef();
   mPhotoRef = React.createRef();
+  qViewRef = React.createRef();
+  mViewRef = React.createRef();
+
+  // --- fit long entries to the panel ----------------------------------------
+  // Panels are sized to the viewport, so a long quote or message would spill.
+  // Shrink its type until the slide fits; if even MIN_FIT can't contain it,
+  // let that one slide scroll rather than shrink past legibility.
+  fitSlide(slide) {
+    const targets = [...slide.querySelectorAll('[data-fit]')];
+    if (!targets.length || !slide.clientHeight) return;
+    slide.style.overflowY = 'hidden';
+    // Drive the size through --fit-size, never through font-size itself: the
+    // font-size declaration belongs to React, and clearing it to measure the
+    // natural size would delete it for good (React's style diff sees no change
+    // on re-render, so it never writes it back).
+    const bases = targets.map(t => {
+      t.style.removeProperty('--fit-size');
+      return parseFloat(getComputedStyle(t).fontSize) || 16;
+    });
+    const apply = k => targets.forEach((t, i) => t.style.setProperty('--fit-size', (bases[i] * k).toFixed(2) + 'px'));
+    const fits = () => slide.scrollHeight <= slide.clientHeight + 1;
+    if (fits()) return;
+    apply(MIN_FIT);
+    if (!fits()) { slide.style.overflowY = 'auto'; return; }
+    let lo = MIN_FIT, hi = 1;
+    for (let i = 0; i < 7; i++) {
+      const mid = (lo + hi) / 2;
+      apply(mid);
+      if (fits()) lo = mid; else hi = mid;
+    }
+    apply(lo);
+  }
+  fitAll = () => {
+    for (const ref of [this.qViewRef, this.mViewRef]) {
+      const root = ref.current;
+      if (root) root.querySelectorAll('[data-slide]').forEach(s => this.fitSlide(s));
+    }
+  };
+  scheduleFit = () => {
+    if (this.fitQueued) return;
+    this.fitQueued = true;
+    requestAnimationFrame(() => { this.fitQueued = false; if (this.alive) this.fitAll(); });
+  };
   audios = {};
   alive = true;
   set(update) { if (this.alive) this.setState(update); }
@@ -489,16 +535,26 @@ class Component extends DCLogic {
     return this.qSeq[i];
   }
 
-  componentDidUpdate(prev) { if (prev.view !== this.props.view && this.props.view && !this.cardOnly()) this.setState({ view: this.props.view }); }
+  componentDidUpdate(prev) {
+    if (prev.view !== this.props.view && this.props.view && !this.cardOnly()) this.setState({ view: this.props.view });
+    const sig = this.state.quotes.length + ':' + this.state.messages.length + ':' + this.state.view;
+    if (sig !== this.fitSig) { this.fitSig = sig; this.scheduleFit(); }
+  }
   componentDidMount() {
     this.onKey = e => { if (e.key === 'Escape' && this.state.lightbox) this.setState({ lightbox: null }); };
     window.addEventListener('keydown', this.onKey);
+    this.onResize = () => this.scheduleFit();
+    window.addEventListener('resize', this.onResize);
+    this.scheduleFit();
+    // Web fonts change the metrics the fit was measured against.
+    try { document.fonts.ready.then(this.scheduleFit); } catch (e) {}
     this.load();
   }
   componentWillUnmount() {
     this.alive = false;
     clearInterval(this.playTimer); clearInterval(this.recTimer);
     window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('resize', this.onResize);
     Object.values(this.audios).forEach(a => { try { a.pause(); } catch (e) {} });
     this.stopStream();
     if (this.state.recUrl) try { URL.revokeObjectURL(this.state.recUrl); } catch (e) {}
@@ -762,6 +818,9 @@ class Component extends DCLogic {
       viewItems: [{ value: 'card', label: 'Card' }, { value: 'collect', label: 'Collect messages' }],
       setView: v => { this.stopPlay(); this.setState({ view: v }); },
       quoteCount: qLen, msgCount: mLen,
+      // The card is a fixed-height viewport; the collect forms still grow.
+      panelH: isCard ? PANEL_H : 'auto', panelMin: isCard ? '0px' : '560px',
+      qViewRef: this.qViewRef, mViewRef: this.mViewRef,
       msgTitle: isCard ? `Messages for ${name}` : 'Leave a message',
       emptyHint: s.demo ? 'Entries will appear here once the card is live.' : 'Share the collect link and the first one will land here.',
 
