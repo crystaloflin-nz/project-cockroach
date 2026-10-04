@@ -174,13 +174,15 @@
           <div style="display: flex; width: 100%; transform: {{ mTransform }}; transition: {{ mTransition }};">
             <sc-for list="{{ messages }}" as="m" hint-placeholder-count="1">
               <div data-slide="1" style="flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding-right: 8px; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Avatar" name="{{ m.name }}" size="md" hint-size="40px,40px"></x-import>
-                  <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;">
-                    <div style="font-weight: 600; font-size: var(--text-base);">{{ m.name }}</div>
+                <sc-if value="{{ m.showAuthor }}" hint-placeholder-val="{{ true }}">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Avatar" name="{{ m.name }}" size="md" hint-size="40px,40px"></x-import>
+                    <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;">
+                      <div style="font-weight: 600; font-size: var(--text-base);">{{ m.name }}</div>
+                    </div>
+                    <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Badge" hint-size="80px,24px">{{ m.typeLabel }}</x-import>
                   </div>
-                  <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Badge" hint-size="80px,24px">{{ m.typeLabel }}</x-import>
-                </div>
+                </sc-if>
                 <sc-if value="{{ m.hasCropPhoto }}" hint-placeholder-val="{{ false }}"><div onClick="{{ m.openPhoto }}" role="button" aria-label="View photo full size" style="cursor: zoom-in; width: 100%; height: clamp(110px, 22vh, 220px); flex: none; background-image: {{ m.photoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-xl);"></div></sc-if>
                 <sc-if value="{{ m.isPhotoOnly }}" hint-placeholder-val="{{ false }}"><div style="flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center;"><img src="{{ m.photo }}" alt="Photo from the team" onClick="{{ m.openPhoto }}" style="cursor: zoom-in; display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: var(--radius-xl);"></div></sc-if>
 
@@ -785,6 +787,7 @@ class Component extends DCLogic {
 
     const messages = s.messages.map(m => {
       const photoOnly = !!m.photo && !String(m.text || '').trim();
+      const named = !!String(m.name || '').trim() && String(m.name).trim().toLowerCase() !== 'anonymous';
       const active = s.playing === m.id;
       const t = active ? s.t : 0;
       const dur = s.durs[m.id] || m.dur || 0;
@@ -794,6 +797,7 @@ class Component extends DCLogic {
         // A photo sent on its own shows uncropped; one sent with a message
         // stays a cropped band so the words keep the room.
         isPhotoOnly: photoOnly, hasCropPhoto: !!m.photo && !photoOnly,
+        showAuthor: !photoOnly || named,
         photoBg: m.photo ? 'url("' + m.photo + '")' : 'none', openPhoto: () => this.openPhoto(m.photo),
         isText: m.type === 'text' && !photoOnly, isVoice: m.type === 'voice', isVideo: m.type === 'video',
         hasSrc: !!m.src, noSrc: !m.src,
