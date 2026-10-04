@@ -181,7 +181,8 @@
                   </div>
                   <x-import component-from-global-scope="Ds423FoundationsDesignSystem_660c19.Badge" hint-size="80px,24px">{{ m.typeLabel }}</x-import>
                 </div>
-                <sc-if value="{{ m.hasPhoto }}" hint-placeholder-val="{{ false }}"><div onClick="{{ m.openPhoto }}" role="button" aria-label="View photo full size" style="cursor: zoom-in; width: 100%; height: clamp(110px, 22vh, 220px); flex: none; background-image: {{ m.photoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-xl);"></div></sc-if>
+                <sc-if value="{{ m.hasCropPhoto }}" hint-placeholder-val="{{ false }}"><div onClick="{{ m.openPhoto }}" role="button" aria-label="View photo full size" style="cursor: zoom-in; width: 100%; height: clamp(110px, 22vh, 220px); flex: none; background-image: {{ m.photoBg }}; background-size: cover; background-position: center; border-radius: var(--radius-xl);"></div></sc-if>
+                <sc-if value="{{ m.isPhotoOnly }}" hint-placeholder-val="{{ false }}"><div style="flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center;"><img src="{{ m.photo }}" alt="Photo from the team" onClick="{{ m.openPhoto }}" style="cursor: zoom-in; display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: var(--radius-xl);"></div></sc-if>
 
                 <sc-if value="{{ m.isText }}" hint-placeholder-val="{{ true }}">
                   <div data-fit="1" style="font-size: var(--fit-size, clamp(20px, 2vw, 24px)); line-height: 1.45; color: var(--text-ink); text-wrap: pretty;">{{ m.text }}</div>
@@ -783,13 +784,18 @@ class Component extends DCLogic {
     const mediaStyle = { width: '100%', aspectRatio: '16 / 9', borderRadius: 'var(--radius-xl)', background: 'var(--neutral-950)', display: 'block' };
 
     const messages = s.messages.map(m => {
+      const photoOnly = !!m.photo && !String(m.text || '').trim();
       const active = s.playing === m.id;
       const t = active ? s.t : 0;
       const dur = s.durs[m.id] || m.dur || 0;
       const frac = dur ? Math.min(1, t / dur) : 0;
       return {
-        ...m, typeLabel: m.photo && !m.text ? 'Photo' : typeLabel[m.type], hasPhoto: !!m.photo, photoBg: m.photo ? 'url("' + m.photo + '")' : 'none', openPhoto: () => this.openPhoto(m.photo),
-        isText: m.type === 'text', isVoice: m.type === 'voice', isVideo: m.type === 'video',
+        ...m, typeLabel: photoOnly ? 'Photo' : typeLabel[m.type],
+        // A photo sent on its own shows uncropped; one sent with a message
+        // stays a cropped band so the words keep the room.
+        isPhotoOnly: photoOnly, hasCropPhoto: !!m.photo && !photoOnly,
+        photoBg: m.photo ? 'url("' + m.photo + '")' : 'none', openPhoto: () => this.openPhoto(m.photo),
+        isText: m.type === 'text' && !photoOnly, isVoice: m.type === 'voice', isVideo: m.type === 'video',
         hasSrc: !!m.src, noSrc: !m.src,
         videoEl: m.src ? React.createElement('video', { key: m.src, src: m.src, controls: true, playsInline: true, preload: 'metadata', style: mediaStyle }) : null,
         playing: active, paused: !active,
